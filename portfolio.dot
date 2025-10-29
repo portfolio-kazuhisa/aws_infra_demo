@@ -1,0 +1,110 @@
+digraph G {
+  rankdir = "RL";
+  node [shape = rect, fontname = "sans-serif"];
+  subgraph "cluster_module.dns" {
+    label = "module.dns"
+    fontname = "sans-serif"
+    "module.dns.aws_route53_record.route53_record" [label="aws_route53_record.route53_record"];
+    "module.dns.aws_route53_zone.route53_zone" [label="aws_route53_zone.route53_zone"];
+  }
+  subgraph "cluster_module.ec2" {
+    label = "module.ec2"
+    fontname = "sans-serif"
+    "module.ec2.aws_instance.app_server" [label="aws_instance.app_server"];
+  }
+  subgraph "cluster_module.elb" {
+    label = "module.elb"
+    fontname = "sans-serif"
+    "module.elb.aws_lb.alb" [label="aws_lb.alb"];
+    "module.elb.aws_lb_listener.alb_listener_http" [label="aws_lb_listener.alb_listener_http"];
+    "module.elb.aws_lb_target_group.alb_target_group" [label="aws_lb_target_group.alb_target_group"];
+    "module.elb.aws_lb_target_group_attachment.instance" [label="aws_lb_target_group_attachment.instance"];
+  }
+  subgraph "cluster_module.sg" {
+    label = "module.sg"
+    fontname = "sans-serif"
+    "module.sg.aws_security_group.app_sg" [label="aws_security_group.app_sg"];
+    "module.sg.aws_security_group.db_sg" [label="aws_security_group.db_sg"];
+    "module.sg.aws_security_group.opmng_sg" [label="aws_security_group.opmng_sg"];
+    "module.sg.aws_security_group.web_sg" [label="aws_security_group.web_sg"];
+    "module.sg.aws_security_group_rule.app_in_web_http" [label="aws_security_group_rule.app_in_web_http"];
+    "module.sg.aws_security_group_rule.app_in_web_https" [label="aws_security_group_rule.app_in_web_https"];
+    "module.sg.aws_security_group_rule.app_out_db_mysql" [label="aws_security_group_rule.app_out_db_mysql"];
+    "module.sg.aws_security_group_rule.db_in_mysql" [label="aws_security_group_rule.db_in_mysql"];
+    "module.sg.aws_security_group_rule.opmng_in_ssh" [label="aws_security_group_rule.opmng_in_ssh"];
+    "module.sg.aws_security_group_rule.opmng_out_http" [label="aws_security_group_rule.opmng_out_http"];
+    "module.sg.aws_security_group_rule.opmng_out_https" [label="aws_security_group_rule.opmng_out_https"];
+    "module.sg.aws_security_group_rule.web_in_http" [label="aws_security_group_rule.web_in_http"];
+    "module.sg.aws_security_group_rule.web_in_https" [label="aws_security_group_rule.web_in_https"];
+    "module.sg.aws_security_group_rule.web_out_app_http" [label="aws_security_group_rule.web_out_app_http"];
+    "module.sg.aws_security_group_rule.web_out_app_https" [label="aws_security_group_rule.web_out_app_https"];
+  }
+  subgraph "cluster_module.vpc" {
+    label = "module.vpc"
+    fontname = "sans-serif"
+    "module.vpc.aws_internet_gateway.igw" [label="aws_internet_gateway.igw"];
+    "module.vpc.aws_route.public_rt_igw_r" [label="aws_route.public_rt_igw_r"];
+    "module.vpc.aws_route_table.private_rt" [label="aws_route_table.private_rt"];
+    "module.vpc.aws_route_table.public_rt" [label="aws_route_table.public_rt"];
+    "module.vpc.aws_route_table_association.private_rt_1a" [label="aws_route_table_association.private_rt_1a"];
+    "module.vpc.aws_route_table_association.private_rt_1c" [label="aws_route_table_association.private_rt_1c"];
+    "module.vpc.aws_route_table_association.public_rt_1a" [label="aws_route_table_association.public_rt_1a"];
+    "module.vpc.aws_route_table_association.public_rt_1c" [label="aws_route_table_association.public_rt_1c"];
+    "module.vpc.aws_subnet.private_subnet_1a" [label="aws_subnet.private_subnet_1a"];
+    "module.vpc.aws_subnet.private_subnet_1c" [label="aws_subnet.private_subnet_1c"];
+    "module.vpc.aws_subnet.public_subnet_1a" [label="aws_subnet.public_subnet_1a"];
+    "module.vpc.aws_subnet.public_subnet_1c" [label="aws_subnet.public_subnet_1c"];
+    "module.vpc.aws_vpc.vpc" [label="aws_vpc.vpc"];
+  }
+  "module.dns.aws_route53_record.route53_record" -> "module.dns.aws_route53_zone.route53_zone";
+  "module.dns.aws_route53_record.route53_record" -> "module.elb.aws_lb.alb";
+  "module.ec2.aws_instance.app_server" -> "module.sg.aws_security_group.app_sg";
+  "module.ec2.aws_instance.app_server" -> "module.sg.aws_security_group.opmng_sg";
+  "module.ec2.aws_instance.app_server" -> "module.vpc.aws_subnet.public_subnet_1a";
+  "module.elb.aws_lb.alb" -> "module.sg.aws_security_group.web_sg";
+  "module.elb.aws_lb.alb" -> "module.vpc.aws_subnet.public_subnet_1a";
+  "module.elb.aws_lb.alb" -> "module.vpc.aws_subnet.public_subnet_1c";
+  "module.elb.aws_lb_listener.alb_listener_http" -> "module.elb.aws_lb.alb";
+  "module.elb.aws_lb_listener.alb_listener_http" -> "module.elb.aws_lb_target_group.alb_target_group";
+  "module.elb.aws_lb_target_group.alb_target_group" -> "module.vpc.aws_vpc.vpc";
+  "module.elb.aws_lb_target_group_attachment.instance" -> "module.ec2.aws_instance.app_server";
+  "module.elb.aws_lb_target_group_attachment.instance" -> "module.elb.aws_lb_target_group.alb_target_group";
+  "module.sg.aws_security_group.app_sg" -> "module.vpc.aws_vpc.vpc";
+  "module.sg.aws_security_group.db_sg" -> "module.vpc.aws_vpc.vpc";
+  "module.sg.aws_security_group.opmng_sg" -> "module.vpc.aws_vpc.vpc";
+  "module.sg.aws_security_group.web_sg" -> "module.vpc.aws_vpc.vpc";
+  "module.sg.aws_security_group_rule.app_in_web_http" -> "module.sg.aws_security_group.app_sg";
+  "module.sg.aws_security_group_rule.app_in_web_http" -> "module.sg.aws_security_group.web_sg";
+  "module.sg.aws_security_group_rule.app_in_web_https" -> "module.sg.aws_security_group.app_sg";
+  "module.sg.aws_security_group_rule.app_in_web_https" -> "module.sg.aws_security_group.web_sg";
+  "module.sg.aws_security_group_rule.app_out_db_mysql" -> "module.sg.aws_security_group.app_sg";
+  "module.sg.aws_security_group_rule.app_out_db_mysql" -> "module.sg.aws_security_group.db_sg";
+  "module.sg.aws_security_group_rule.db_in_mysql" -> "module.sg.aws_security_group.app_sg";
+  "module.sg.aws_security_group_rule.db_in_mysql" -> "module.sg.aws_security_group.db_sg";
+  "module.sg.aws_security_group_rule.opmng_in_ssh" -> "module.sg.aws_security_group.opmng_sg";
+  "module.sg.aws_security_group_rule.opmng_out_http" -> "module.sg.aws_security_group.opmng_sg";
+  "module.sg.aws_security_group_rule.opmng_out_https" -> "module.sg.aws_security_group.opmng_sg";
+  "module.sg.aws_security_group_rule.web_in_http" -> "module.sg.aws_security_group.web_sg";
+  "module.sg.aws_security_group_rule.web_in_https" -> "module.sg.aws_security_group.web_sg";
+  "module.sg.aws_security_group_rule.web_out_app_http" -> "module.sg.aws_security_group.app_sg";
+  "module.sg.aws_security_group_rule.web_out_app_http" -> "module.sg.aws_security_group.web_sg";
+  "module.sg.aws_security_group_rule.web_out_app_https" -> "module.sg.aws_security_group.app_sg";
+  "module.sg.aws_security_group_rule.web_out_app_https" -> "module.sg.aws_security_group.web_sg";
+  "module.vpc.aws_internet_gateway.igw" -> "module.vpc.aws_vpc.vpc";
+  "module.vpc.aws_route.public_rt_igw_r" -> "module.vpc.aws_internet_gateway.igw";
+  "module.vpc.aws_route.public_rt_igw_r" -> "module.vpc.aws_route_table.public_rt";
+  "module.vpc.aws_route_table.private_rt" -> "module.vpc.aws_vpc.vpc";
+  "module.vpc.aws_route_table.public_rt" -> "module.vpc.aws_vpc.vpc";
+  "module.vpc.aws_route_table_association.private_rt_1a" -> "module.vpc.aws_route_table.private_rt";
+  "module.vpc.aws_route_table_association.private_rt_1a" -> "module.vpc.aws_subnet.private_subnet_1a";
+  "module.vpc.aws_route_table_association.private_rt_1c" -> "module.vpc.aws_route_table.private_rt";
+  "module.vpc.aws_route_table_association.private_rt_1c" -> "module.vpc.aws_subnet.private_subnet_1c";
+  "module.vpc.aws_route_table_association.public_rt_1a" -> "module.vpc.aws_route_table.public_rt";
+  "module.vpc.aws_route_table_association.public_rt_1a" -> "module.vpc.aws_subnet.public_subnet_1a";
+  "module.vpc.aws_route_table_association.public_rt_1c" -> "module.vpc.aws_route_table.public_rt";
+  "module.vpc.aws_route_table_association.public_rt_1c" -> "module.vpc.aws_subnet.public_subnet_1c";
+  "module.vpc.aws_subnet.private_subnet_1a" -> "module.vpc.aws_vpc.vpc";
+  "module.vpc.aws_subnet.private_subnet_1c" -> "module.vpc.aws_vpc.vpc";
+  "module.vpc.aws_subnet.public_subnet_1a" -> "module.vpc.aws_vpc.vpc";
+  "module.vpc.aws_subnet.public_subnet_1c" -> "module.vpc.aws_vpc.vpc";
+}
