@@ -43,9 +43,14 @@ jobs:
 
       - name: Terraform Init
         run: terraform init -input=false #対話形式をオフ
+        working-directory: terraform
+
 
       - name: Terraform Validate
         run: terraform validate #構文・型などチェック
+        working-directory: terraform
+
 
       - name: Terraform Plan
         run: terraform plan
+        working-directory: terraform
