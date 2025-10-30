@@ -44,6 +44,9 @@ jobs:
       - name: plan
         run: |
           terraform plan
-      - name: apply
+#      - name: apply
+#        run: |
+#          terraform apply -auto-approve
+      - name: destroy
         run: |
-          terraform apply -auto-approve
+          terraform destroy -auto-approve
