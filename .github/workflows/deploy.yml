@@ -4,53 +4,28 @@ on:
   push:
     branches:
       - develop
+  workflow_dispatch:
 
 permissions:
   id-token: write
   contents: read
 
+env:
+  TF_VERSION: 1.3.13
+
+defaults:
+  run:
+    shell: bash
+    #working-directory: main.tf
+
 jobs:
   preview:
-    name: "initial"
+    name: "preview"
     runs-on: ubuntu-latest
-    steps:
-      - run: echo "initial"
-
-  plan:
-    name: Terraform Plan
-    runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v5
+      - name: Setup terraform
+        uses: hashicorp/setup-terraform@v3
         with:
-          fetch-depth: 0
-
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2
-        with:
-          terraform_version: 1.13.3
-      
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ap-northeast-1
-          
-      #- name: Terraform fmt (check)
-      #  run: terraform fmt -recursive
-
-      - name: Terraform Init
-        run: terraform init -input=false #対話形式をオフ
-        working-directory: terraform
-
-
-      - name: Terraform Validate
-        run: terraform validate #構文・型などチェック
-        working-directory: terraform
-
-
-      - name: Terraform Plan
-        run: terraform plan
-        working-directory: terraform
+          terraform_version: ${{ env.TF_VERSION }}
