@@ -6,8 +6,8 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      #version = "~> 3.0" #GitHub Actions用
-      version = "~> 6.0"
+      version = "~> 3.0" #GitHub Actions用　理由はわからない。解明する必要あり
+      #version = "~> 6.0" #local実行用
     }
   }
 }
