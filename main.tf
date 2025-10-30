@@ -5,9 +5,9 @@ terraform {
   required_version = ">=0.13"
   required_providers {
     aws = {
-      source  = "hashicorp/aws"
-      version = "~> 3.0" #GitHub Actions用　理由はわからない。解明する必要あり
-      #version = "~> 6.0" #local実行用
+      source = "hashicorp/aws"
+      #version = "~> 3.0" #GitHub Actions用　理由はわからない。解明する必要あり
+      version = "~> 6.0" #local実行用
     }
   }
 }
@@ -81,4 +81,15 @@ module "vpc" {
   source      = "./modules/vpc"
   project     = "portfolio"
   environment = "dev"
+}
+
+module "acm" {
+  source            = "./modules/acm"
+  project           = "portfolio"
+  environment       = "dev"
+  validation_method = "DNS"
+  lifecycle         = "create_before_destroy"
+  DomainName        = "portfolio-kazuhisa.com"
+
+  route53_zone = module.dns.route53_zone
 }
