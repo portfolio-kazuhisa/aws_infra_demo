@@ -2,7 +2,7 @@
 # VPC
 ###############################################
 resource "aws_vpc" "vpc" {
-  cidr_blockxxx                       = "192.168.0.0/20"
+  cidr_block                       = "192.168.0.0/20"
   instance_tenancy                 = "default" #基本はデフォルトでよい
   enable_dns_support               = true      #DNS解決
   enable_dns_hostnames             = true      #DNSホスト名
