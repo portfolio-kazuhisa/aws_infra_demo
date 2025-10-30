@@ -38,3 +38,6 @@ jobs:
       - name: init
         run: |
           terraform init -no-color
+      - name: validate
+        run: |
+          terraform validate -no-color
