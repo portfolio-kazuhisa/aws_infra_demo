@@ -43,4 +43,7 @@ jobs:
           terraform validate -no-color
       - name: plan
         run: |
-          terraform plan -no-color
+          terraform plan
+      - name: apply
+        run: |
+          terraform apply -auto-approve
