@@ -92,5 +92,5 @@ module "acm" {
   DomainName        = "portfolio-kazuhisa.com"
 
   zone_id   = module.dns.zone_id
-  host_zone = module.dns.host_zone
+  #host_zone = module.dns.host_zone
 }
