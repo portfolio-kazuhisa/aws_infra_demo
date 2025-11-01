@@ -29,3 +29,6 @@ variable "target_ec2_id" {
   type = string
 }
 
+variable "tokyo_cert_arn" {
+  type = string
+}

@@ -14,15 +14,17 @@ variable "DomainName" {
 }
 
 variable "validation_method" {
-  type = enum
-}
-
-variable "lifecycle" {
   type = string
 }
 
-variable "route53_zone" {
+variable "zone_id" {
+  type = string
+}
+
+variable "host_zone" {
   type = object({
-    route53_zone = string
+    id      = string
+    name    = string
+    zone_id = optional(string) # 必要な属性だけ指定してOK
   })
 }

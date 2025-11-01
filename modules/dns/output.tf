@@ -4,6 +4,10 @@
 # 　　　　　　　CI/CD や外部スクリプトへの値の引き渡し
 ####################################################
 
-output "route53_zone" {
+output "zone_id" {
+  value = aws_route53_zone.route53_zone.zone_id
+}
+
+output "host_zone" {
   value = aws_route53_zone.route53_zone
 }

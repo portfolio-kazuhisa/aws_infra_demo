@@ -20,5 +20,7 @@ resource "aws_instance" "app_server" {
   }
 
   #初回実行時
-  user_data = templatefile("${path.module}/user_data.sh", {})
+  user_data = templatefile("${path.module}/shell/user_data.sh", {
+    INDEX_FILE = "/var/www/html/index.html"
+  })
 }

@@ -6,8 +6,8 @@ terraform {
   required_providers {
     aws = {
       source = "hashicorp/aws"
-      #version = "~> 3.0" #GitHub Actions用　理由はわからない。解明する必要あり
-      version = "~> 6.0" #local実行用
+      version = "~> 3.0" #GitHub Actions用　理由はわからない。解明する必要あり
+      #version = "~> 6.0" #local実行用
     }
   }
 }
@@ -41,11 +41,12 @@ module "elb" {
   project     = "portfolio"
   environment = "dev"
 
-  target_ec2_id = module.ec2.ec2_id
-  vpc_id        = module.vpc.vpc_id
-  web_sg_id     = module.sg.web_sg_id
-  subnet_id_1a  = module.vpc.public_subnet_1a_id #vpc/output.tfから受け取る。
-  subnet_id_1c  = module.vpc.public_subnet_1c_id #vpc/output.tfから受け取る。
+  target_ec2_id  = module.ec2.ec2_id
+  vpc_id         = module.vpc.vpc_id
+  web_sg_id      = module.sg.web_sg_id
+  subnet_id_1a   = module.vpc.public_subnet_1a_id #vpc/output.tfから受け取る。
+  subnet_id_1c   = module.vpc.public_subnet_1c_id #vpc/output.tfから受け取る。
+  tokyo_cert_arn = module.acm.tokyo_cert.arn
 }
 
 #module "rds" {
@@ -88,8 +89,8 @@ module "acm" {
   project           = "portfolio"
   environment       = "dev"
   validation_method = "DNS"
-  lifecycle         = "create_before_destroy"
   DomainName        = "portfolio-kazuhisa.com"
 
-  route53_zone = module.dns.route53_zone
+  zone_id   = module.dns.zone_id
+  host_zone = module.dns.host_zone
 }
