@@ -26,15 +26,18 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
+        
       - name: Setup terraform
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: ${{ env.TF_VERSION }}
+
       - name: configure aws credential
         uses: aws-actions/configure-aws-credentials@v5.1.0
         with:
           aws-region: ${{ env.AWS_REGION }}
           role-to-assume: ${{ secrets.AWS_IAM_ROLE_ARN }}
+
       - name: init # init -upgradeをすることにより、GitHub Actions 上でも AWS Providerの最新化ができる
         run: |
           terraform init -no-color -upgrade
@@ -42,13 +45,26 @@ jobs:
       - name: validate
         run: |
           terraform validate -no-color
+
       - name: plan
         run: |
           terraform plan
+
       - name: apply
         run: |
           terraform apply -auto-approve
-      - name: destroy
+
+      - name: always destroy
         if: always()
         run: | 
-          terraform destroy -auto-approve || echo "Destroy failed but continuing"
+          terraform destroy -auto-approve
+
+#      - name: only success destroy
+#        if: success()
+#        run: | 
+#          terraform destroy -auto-approve
+
+#      - name: only failure destroy
+#        if: failure()
+#        run: | 
+#          terraform destroy -auto-approve         
