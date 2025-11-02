@@ -6,8 +6,8 @@ terraform {
   required_providers {
     aws = {
       source = "hashicorp/aws"
-      version = "~> 3.0" #GitHub Actions用　理由はわからない。解明する必要あり
-      #version = "~> 6.0" #local実行用
+      #version = "~> 3.0" #GitHub Actions用　理由はわからない。解明する必要あり
+      version = "~> 6.0" #local実行用
     }
   }
 }
@@ -92,5 +92,5 @@ module "acm" {
   DomainName        = "portfolio-kazuhisa.com"
 
   zone_id   = module.dns.zone_id
-  #host_zone = module.dns.host_zone
+  host_zone = module.dns.host_zone
 }
