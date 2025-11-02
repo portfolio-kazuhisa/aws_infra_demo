@@ -51,6 +51,7 @@ jobs:
           terraform plan
 
       - name: apply
+        timeout-minutes: 120  # 120分でタイムアウト
         run: |
           terraform apply -auto-approve
 

@@ -1,2 +1,2 @@
 # log流出を防ぐ
-result.*
+*.log
