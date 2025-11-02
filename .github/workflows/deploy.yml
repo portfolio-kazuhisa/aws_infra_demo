@@ -35,7 +35,7 @@ jobs:
         with:
           aws-region: ${{ env.AWS_REGION }}
           role-to-assume: ${{ secrets.AWS_IAM_ROLE_ARN }}
-      - name: init
+      - name: init # init -upgradeをすることにより、GitHub Actions 上でも AWS Providerの最新化ができる
         run: |
           terraform init -no-color -upgrade
 

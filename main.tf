@@ -7,8 +7,8 @@ terraform {
     aws = {
       source = "hashicorp/aws"
       #AWSプロバイダーバージョン設定（terraformのバージョンではない）
-      #version = "~> 3.0" #GitHub Actions用　理由はわからない。解明する必要あり
-      version = "~> 6.0" #local実行用
+      #GitHub Actionsのプロバイダーも　initの際に -updateオプションを使うとプロバイダー更新できる
+      version = "~> 6.0"
     }
   }
 }
@@ -17,6 +17,7 @@ terraform {
 # Provider
 # ---------------------------------------------
 provider "aws" {
+  # - GitHub Actions 上で profile を指定するとエラーになる(なんで？)たぶんローカルの認証を見ちゃうから
   # profile = "terraform"
   region  = "ap-northeast-1"
 }
