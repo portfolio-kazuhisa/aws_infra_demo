@@ -57,10 +57,10 @@ jobs:
   cleanup:
     name: "cleanup"
     needs: preview
+    if: always()
     runs-on: ubuntu-latest
     steps:
       - name: always destroy
-        if: always()
         run: | 
           terraform destroy -auto-approve
 
