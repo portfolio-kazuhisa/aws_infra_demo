@@ -86,13 +86,13 @@ module "vpc" {
   environment = "dev"
 }
 
-#module "acm" {
-#  source            = "./modules/acm"
-#  project           = "portfolio"
-#  environment       = "dev"
-#  validation_method = "DNS"
-#  DomainName        = "portfolio-kazuhisa.com"
+module "acm" {
+  source            = "./modules/acm"
+  project           = "portfolio"
+  environment       = "dev"
+  validation_method = "DNS"
+  DomainName        = "portfolio-kazuhisa.com"
 
-#  zone_id   = module.dns.zone_id
-#  host_zone = module.dns.host_zone
-#}
+  zone_id   = module.dns.zone_id
+  host_zone = module.dns.host_zone
+}
