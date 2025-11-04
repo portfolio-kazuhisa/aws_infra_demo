@@ -7,7 +7,7 @@ resource "aws_acm_certificate" "tokyo_cert" {
   validation_method = var.validation_method
 
   tags = {
-    Name    = "${var.project}-${var.environment}-acm"
+    Name    = "${var.project}-${var.environment}-acm-toyko"
     Project = var.project
     Env     = var.environment
   }
@@ -50,4 +50,46 @@ resource "aws_route53_record" "route53_acm_dns_resolve" {
 resource "aws_acm_certificate_validation" "cert_valid" {
   certificate_arn         = aws_acm_certificate.tokyo_cert.arn
   validation_record_fqdns = [for record in aws_route53_record.route53_acm_dns_resolve : record.fqdn]
+}
+
+# CloudFront の仕様で、TLS 証明書は「us-east-1（バージニア北部）」に存在していないと使えないっていうルールがある
+# 証明書を「us-east-1（バージニア北部）」に作成する。
+
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = ">= 6.0"
+      configuration_aliases = [aws.virginia]
+    }
+  }
+}
+
+provider "aws" {
+  alias  = "virginia" #上書きするための識別子
+  region = "us-east-1"
+}
+
+resource "aws_acm_certificate" "virginia_cert" {
+  provider = aws.virginia #デフォルトのプロバイダーを上書きすることが出来る
+  domain_name       = "*.${var.DomainName}"
+  validation_method = var.validation_method
+
+  tags = {
+    Name    = "${var.project}-${var.environment}-acm-virginia"
+    Project = var.project
+    Env     = var.environment
+  }
+
+  lifecycle {
+    create_before_destroy = true
+  }
+
+  #リソース間の依存関係を明示的に指定するため
+  #明示的に順序を制御したいのでdepends_onを使用
+  #ACM証明書のDNS検証に必要なゾーンが先に作成される
+  depends_on = [var.host_zone]
+
+  #depends_on = aws_route53_zone.route53_zone # []つけへんとエラーになる
+  # →　単体の値（stringやobject）として解釈しようとして失敗
 }

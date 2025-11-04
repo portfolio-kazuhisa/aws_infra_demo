@@ -1,10 +1,17 @@
 digraph G {
   rankdir = "RL";
   node [shape = rect, fontname = "sans-serif"];
+  subgraph "cluster_module.acm" {
+    label = "module.acm"
+    fontname = "sans-serif"
+    "module.acm.aws_acm_certificate.tokyo_cert" [label="aws_acm_certificate.tokyo_cert"];
+    "module.acm.aws_acm_certificate_validation.cert_valid" [label="aws_acm_certificate_validation.cert_valid"];
+    "module.acm.aws_route53_record.route53_acm_dns_resolve" [label="aws_route53_record.route53_acm_dns_resolve"];
+  }
   subgraph "cluster_module.dns" {
     label = "module.dns"
     fontname = "sans-serif"
-    "module.dns.aws_route53_record.route53_record" [label="aws_route53_record.route53_record"];
+    "module.dns.aws_route53_record.route53_A_record" [label="aws_route53_record.route53_A_record"];
     "module.dns.aws_route53_zone.route53_zone" [label="aws_route53_zone.route53_zone"];
   }
   subgraph "cluster_module.ec2" {
@@ -17,6 +24,7 @@ digraph G {
     fontname = "sans-serif"
     "module.elb.aws_lb.alb" [label="aws_lb.alb"];
     "module.elb.aws_lb_listener.alb_listener_http" [label="aws_lb_listener.alb_listener_http"];
+    "module.elb.aws_lb_listener.alb_listener_https" [label="aws_lb_listener.alb_listener_https"];
     "module.elb.aws_lb_target_group.alb_target_group" [label="aws_lb_target_group.alb_target_group"];
     "module.elb.aws_lb_target_group_attachment.instance" [label="aws_lb_target_group_attachment.instance"];
   }
@@ -56,8 +64,11 @@ digraph G {
     "module.vpc.aws_subnet.public_subnet_1c" [label="aws_subnet.public_subnet_1c"];
     "module.vpc.aws_vpc.vpc" [label="aws_vpc.vpc"];
   }
-  "module.dns.aws_route53_record.route53_record" -> "module.dns.aws_route53_zone.route53_zone";
-  "module.dns.aws_route53_record.route53_record" -> "module.elb.aws_lb.alb";
+  "module.acm.aws_acm_certificate.tokyo_cert" -> "module.dns.aws_route53_zone.route53_zone";
+  "module.acm.aws_acm_certificate_validation.cert_valid" -> "module.acm.aws_route53_record.route53_acm_dns_resolve";
+  "module.acm.aws_route53_record.route53_acm_dns_resolve" -> "module.acm.aws_acm_certificate.tokyo_cert";
+  "module.dns.aws_route53_record.route53_A_record" -> "module.dns.aws_route53_zone.route53_zone";
+  "module.dns.aws_route53_record.route53_A_record" -> "module.elb.aws_lb.alb";
   "module.ec2.aws_instance.app_server" -> "module.sg.aws_security_group.app_sg";
   "module.ec2.aws_instance.app_server" -> "module.sg.aws_security_group.opmng_sg";
   "module.ec2.aws_instance.app_server" -> "module.vpc.aws_subnet.public_subnet_1a";
@@ -66,6 +77,9 @@ digraph G {
   "module.elb.aws_lb.alb" -> "module.vpc.aws_subnet.public_subnet_1c";
   "module.elb.aws_lb_listener.alb_listener_http" -> "module.elb.aws_lb.alb";
   "module.elb.aws_lb_listener.alb_listener_http" -> "module.elb.aws_lb_target_group.alb_target_group";
+  "module.elb.aws_lb_listener.alb_listener_https" -> "module.acm.aws_acm_certificate.tokyo_cert";
+  "module.elb.aws_lb_listener.alb_listener_https" -> "module.elb.aws_lb.alb";
+  "module.elb.aws_lb_listener.alb_listener_https" -> "module.elb.aws_lb_target_group.alb_target_group";
   "module.elb.aws_lb_target_group.alb_target_group" -> "module.vpc.aws_vpc.vpc";
   "module.elb.aws_lb_target_group_attachment.instance" -> "module.ec2.aws_instance.app_server";
   "module.elb.aws_lb_target_group_attachment.instance" -> "module.elb.aws_lb_target_group.alb_target_group";

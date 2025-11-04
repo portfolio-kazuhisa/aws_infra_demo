@@ -17,9 +17,9 @@ terraform {
 # Provider
 # ---------------------------------------------
 provider "aws" {
-  # - GitHub Actions 上で profile を指定するとエラーになる(なんで？)たぶんローカルの認証を見ちゃうから
+  # GitHub Actions 上で profile を指定するとエラーになる(なんで？)たぶんローカルの認証を見ちゃうから
   # profile = "terraform"
-  region  = "ap-northeast-1"
+  region = "ap-northeast-1"
 }
 
 ####################################################
@@ -86,13 +86,13 @@ module "vpc" {
   environment = "dev"
 }
 
-module "acm" {
-  source            = "./modules/acm"
-  project           = "portfolio"
-  environment       = "dev"
-  validation_method = "DNS"
-  DomainName        = "portfolio-kazuhisa.com"
+#module "acm" {
+#  source            = "./modules/acm"
+#  project           = "portfolio"
+#  environment       = "dev"
+#  validation_method = "DNS"
+#  DomainName        = "portfolio-kazuhisa.com"
 
-  zone_id   = module.dns.zone_id
-  host_zone = module.dns.host_zone
-}
+#  zone_id   = module.dns.zone_id
+#  host_zone = module.dns.host_zone
+#}

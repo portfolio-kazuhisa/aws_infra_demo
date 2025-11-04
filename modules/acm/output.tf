@@ -7,6 +7,11 @@
 output "tokyo_cert" {
   value = aws_acm_certificate.tokyo_cert
 }
+
+output "virginia_cert" {
+  value = aws_acm_certificate.virginia_cert
+}
+
 output "route53_acm_dns_resolve" {
   value = aws_route53_record.route53_acm_dns_resolve
 }

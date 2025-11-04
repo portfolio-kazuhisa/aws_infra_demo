@@ -51,16 +51,12 @@ jobs:
           terraform plan
 
       - name: apply
-        timeout-minutes: 1  # ～分でタイムアウト(ただし、JOB全体を強制終了させる。)
+        #timeout-minutes: 1  # ～分でタイムアウト(ただし、JOB全体を強制終了させる。)stat管理ができないためデストロイできない。
         run: |
           terraform apply -auto-approve
-  cleanup:
-    name: "cleanup"
-    needs: preview
-    if: always()
-    runs-on: ubuntu-latest
-    steps:
+
       - name: always destroy
+        if: always()
         run: | 
           terraform destroy -auto-approve
 

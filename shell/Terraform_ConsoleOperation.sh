@@ -32,4 +32,4 @@ terraform state mv <旧リソース名> <新リソース名>
 terraform state rm <リソース名>
 
 # 依存関係をグラフ化]
-terraform graph > sample.dot
+terraform graph > portfolio.dot
