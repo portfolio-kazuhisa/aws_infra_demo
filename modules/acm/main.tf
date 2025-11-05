@@ -58,8 +58,8 @@ resource "aws_acm_certificate_validation" "cert_valid" {
 terraform {
   required_providers {
     aws = {
-      source  = "hashicorp/aws"
-      version = ">= 6.0"
+      source                = "hashicorp/aws"
+      version               = ">= 6.0"
       configuration_aliases = [aws.virginia]
     }
   }
@@ -71,7 +71,7 @@ provider "aws" {
 }
 
 resource "aws_acm_certificate" "virginia_cert" {
-  provider = aws.virginia #デフォルトのプロバイダーを上書きすることが出来る
+  provider          = aws.virginia #デフォルトのプロバイダーを上書きすることが出来る
   domain_name       = "*.${var.DomainName}"
   validation_method = var.validation_method
 

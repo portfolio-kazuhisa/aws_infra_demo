@@ -3,7 +3,7 @@ name: Terraform CI/CD
 on:
   push:
     branches:
-      - develop
+      - main
   workflow_dispatch:
 
 permissions:

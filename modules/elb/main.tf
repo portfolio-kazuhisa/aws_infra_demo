@@ -32,7 +32,7 @@ resource "aws_lb_listener" "alb_listener_https" {
   ssl_policy        = "ELBSecurityPolicy-2016-08"
   #ssl_policy        = "ELBSecurityPolicy-TLS13-1-0-FIPS-2023-04" #HTTPS リスナーが FIPS ポリシーを使用(厳重)
   #ssl_policy        = "ELBSecurityPolicy-TLS13-1-0-2021-06" #HTTPS リスナーが TLS 1.3 セキュリティポリシーを使用
-  certificate_arn   = var.tokyo_cert_arn
+  certificate_arn = var.tokyo_cert_arn
 
   default_action {
     type             = "forward"
