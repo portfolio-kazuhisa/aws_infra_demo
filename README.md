@@ -7,5 +7,4 @@
 ・GitHub Actionsでのstate管理
 
 ・RDS/パラメーターストア
-・IAMロール
-・S3
+・cloudfront S3の権限見直し。
