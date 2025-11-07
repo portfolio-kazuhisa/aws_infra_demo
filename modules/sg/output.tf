@@ -14,3 +14,7 @@ output "app_sg_id" {
 output "mng_sg_id" {
   value = aws_security_group.opmng_sg.id
 }
+
+output "rds_sg_id" {
+  value = aws_security_group.db_sg.id
+}

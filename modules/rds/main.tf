@@ -33,8 +33,8 @@ resource "aws_db_option_group" "mysql_standalone_optiongroup" {
 resource "aws_db_subnet_group" "mysql_standalone_subnetgroup" {
   name = "${var.project}-${var.environment}-mysql-standalone-subnetgroup"
   subnet_ids = [
-    aws_subnet.private_subnet_1a.id,
-    aws_subnet.private_subnet_1c.id
+    var.subnet_id_1a,
+    var.subnet_id_1c
   ]
 
   tags = {
@@ -55,24 +55,24 @@ resource "random_string" "db_password" {
 
 resource "aws_db_instance" "mysql_standalone" {
   engine         = "mysql"
-  engine_version = "8.0.20"
+  engine_version = "8.0.42" #重要
 
   identifier = "${var.project}-${var.environment}-mysql-standalone"
 
   username = "admin"
   password = random_string.db_password.result
 
-  instance_class = "db.t2.micro"
+  instance_class = "db.t3.micro" #重要
 
   allocated_storage     = 20
   max_allocated_storage = 50
-  storage_type          = "gp2"
+  storage_type          = "gp3" #重要
   storage_encrypted     = false
 
   multi_az               = false
   availability_zone      = "ap-northeast-1a"
   db_subnet_group_name   = aws_db_subnet_group.mysql_standalone_subnetgroup.name
-  vpc_security_group_ids = [aws_security_group.db_sg.id]
+  vpc_security_group_ids = [var.rds_sg_id]
   publicly_accessible    = false
   port                   = 3306
 

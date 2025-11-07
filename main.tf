@@ -57,11 +57,15 @@ module "iam" {
   environment = "dev"
 }
 
-#module "rds" {
-#  project = "portfolio"
-#  environment = "dev"
-#  source = "./modules/rds"
-#}
+module "rds" {
+  source = "./modules/rds"
+  project = "portfolio"
+  environment = "dev"
+
+  subnet_id_1a   = module.vpc.public_subnet_1a_id
+  subnet_id_1c   = module.vpc.public_subnet_1c_id
+  rds_sg_id     = module.sg.rds_sg_id
+}
 
 module "s3" {
   source      = "./modules/s3"
