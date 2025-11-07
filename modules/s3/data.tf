@@ -1,3 +1,6 @@
 data "aws_prefix_list" "s3_pl" {
-  name = "com.amazonaws.*.s3"
+  filter {
+    name   = "prefix-list-name"
+    values = ["com.amazonaws.ap-northeast-1.s3"]
+  }
 }

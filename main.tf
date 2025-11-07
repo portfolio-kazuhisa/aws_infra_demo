@@ -51,17 +51,23 @@ module "elb" {
   tokyo_cert_arn = module.acm.tokyo_cert.arn
 }
 
+module "iam" {
+  source  = "./modules/iam"
+  project = "portfolio"
+  environment = "dev"
+}
+
 #module "rds" {
 #  project = "portfolio"
 #  environment = "dev"
 #  source = "./modules/rds"
 #}
 
-#module "s3" {
-#  source      = "./modules/s3"
-#  project     = "portfolio"
-#  environment = "dev"
-#}
+module "s3" {
+  source      = "./modules/s3"
+  project     = "portfolio"
+  environment = "dev"
+}
 
 module "sg" {
   source      = "./modules/sg"
@@ -86,13 +92,13 @@ module "vpc" {
   environment = "dev"
 }
 
-#module "acm" {
-#  source            = "./modules/acm"
-#  project           = "portfolio"
-#  environment       = "dev"
-#  validation_method = "DNS"
-#  DomainName        = "portfolio-kazuhisa.com"
+module "acm" {
+  source            = "./modules/acm"
+  project           = "portfolio"
+  environment       = "dev"
+  validation_method = "DNS"
+  DomainName        = "portfolio-kazuhisa.com"
 
-#  zone_id   = module.dns.zone_id
-#  host_zone = module.dns.host_zone
-#}
+  zone_id   = module.dns.zone_id
+  host_zone = module.dns.host_zone
+}

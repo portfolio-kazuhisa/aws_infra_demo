@@ -5,6 +5,7 @@ digraph G {
     label = "module.acm"
     fontname = "sans-serif"
     "module.acm.aws_acm_certificate.tokyo_cert" [label="aws_acm_certificate.tokyo_cert"];
+    "module.acm.aws_acm_certificate.virginia_cert" [label="aws_acm_certificate.virginia_cert"];
     "module.acm.aws_acm_certificate_validation.cert_valid" [label="aws_acm_certificate_validation.cert_valid"];
     "module.acm.aws_route53_record.route53_acm_dns_resolve" [label="aws_route53_record.route53_acm_dns_resolve"];
   }
@@ -27,6 +28,24 @@ digraph G {
     "module.elb.aws_lb_listener.alb_listener_https" [label="aws_lb_listener.alb_listener_https"];
     "module.elb.aws_lb_target_group.alb_target_group" [label="aws_lb_target_group.alb_target_group"];
     "module.elb.aws_lb_target_group_attachment.instance" [label="aws_lb_target_group_attachment.instance"];
+  }
+  subgraph "cluster_module.iam" {
+    label = "module.iam"
+    fontname = "sans-serif"
+    "module.iam.data.aws_iam_policy_document.ec2_assume_role" [label="data.aws_iam_policy_document.ec2_assume_role"];
+    "module.iam.aws_iam_role.app_iam_role" [label="aws_iam_role.app_iam_role"];
+    "module.iam.aws_iam_role_policy_attachment.app_iam_role_s3_PutBucketPolicy" [label="aws_iam_role_policy_attachment.app_iam_role_s3_PutBucketPolicy"];
+  }
+  subgraph "cluster_module.s3" {
+    label = "module.s3"
+    fontname = "sans-serif"
+    "module.s3.data.aws_iam_policy_document.s3_static_bucket" [label="data.aws_iam_policy_document.s3_static_bucket"];
+    "module.s3.data.aws_prefix_list.s3_pl" [label="data.aws_prefix_list.s3_pl"];
+    "module.s3.aws_s3_bucket.s3_static_bucket" [label="aws_s3_bucket.s3_static_bucket"];
+    "module.s3.aws_s3_bucket_policy.s3_static_bucket" [label="aws_s3_bucket_policy.s3_static_bucket"];
+    "module.s3.aws_s3_bucket_public_access_block.s3_static_bucket" [label="aws_s3_bucket_public_access_block.s3_static_bucket"];
+    "module.s3.aws_s3_bucket_versioning.s3_static_bucket_versioning" [label="aws_s3_bucket_versioning.s3_static_bucket_versioning"];
+    "module.s3.random_string.s3_unique_key" [label="random_string.s3_unique_key"];
   }
   subgraph "cluster_module.sg" {
     label = "module.sg"
@@ -65,6 +84,7 @@ digraph G {
     "module.vpc.aws_vpc.vpc" [label="aws_vpc.vpc"];
   }
   "module.acm.aws_acm_certificate.tokyo_cert" -> "module.dns.aws_route53_zone.route53_zone";
+  "module.acm.aws_acm_certificate.virginia_cert" -> "module.dns.aws_route53_zone.route53_zone";
   "module.acm.aws_acm_certificate_validation.cert_valid" -> "module.acm.aws_route53_record.route53_acm_dns_resolve";
   "module.acm.aws_route53_record.route53_acm_dns_resolve" -> "module.acm.aws_acm_certificate.tokyo_cert";
   "module.dns.aws_route53_record.route53_A_record" -> "module.dns.aws_route53_zone.route53_zone";
@@ -83,6 +103,14 @@ digraph G {
   "module.elb.aws_lb_target_group.alb_target_group" -> "module.vpc.aws_vpc.vpc";
   "module.elb.aws_lb_target_group_attachment.instance" -> "module.ec2.aws_instance.app_server";
   "module.elb.aws_lb_target_group_attachment.instance" -> "module.elb.aws_lb_target_group.alb_target_group";
+  "module.iam.aws_iam_role.app_iam_role" -> "module.iam.data.aws_iam_policy_document.ec2_assume_role";
+  "module.iam.aws_iam_role_policy_attachment.app_iam_role_s3_PutBucketPolicy" -> "module.iam.aws_iam_role.app_iam_role";
+  "module.s3.data.aws_iam_policy_document.s3_static_bucket" -> "module.s3.aws_s3_bucket.s3_static_bucket";
+  "module.s3.aws_s3_bucket.s3_static_bucket" -> "module.s3.random_string.s3_unique_key";
+  "module.s3.aws_s3_bucket_policy.s3_static_bucket" -> "module.s3.data.aws_iam_policy_document.s3_static_bucket";
+  "module.s3.aws_s3_bucket_policy.s3_static_bucket" -> "module.s3.aws_s3_bucket_public_access_block.s3_static_bucket";
+  "module.s3.aws_s3_bucket_public_access_block.s3_static_bucket" -> "module.s3.aws_s3_bucket.s3_static_bucket";
+  "module.s3.aws_s3_bucket_versioning.s3_static_bucket_versioning" -> "module.s3.aws_s3_bucket.s3_static_bucket";
   "module.sg.aws_security_group.app_sg" -> "module.vpc.aws_vpc.vpc";
   "module.sg.aws_security_group.db_sg" -> "module.vpc.aws_vpc.vpc";
   "module.sg.aws_security_group.opmng_sg" -> "module.vpc.aws_vpc.vpc";
