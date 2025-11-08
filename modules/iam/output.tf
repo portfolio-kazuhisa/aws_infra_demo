@@ -3,6 +3,6 @@
 # ユースケース：他の Terraform モジュールやステージへの値の受け渡し
 # 　　　　　　　CI/CD や外部スクリプトへの値の引き渡し
 ####################################################
-output "ec2_assume_role" {
-  value = data.aws_iam_policy_document.ec2_assume_role
+output "ec2_profile" {
+  value = aws_iam_instance_profile.app_ec2_profile.name
 }
