@@ -19,13 +19,13 @@ resource "aws_iam_role" "app_iam_role" {
 
 # EC2 インスタンスが IAM ロールを引き受けるための信頼ポリシー
 # EC2 に IAM ロール（インスタンスプロフィール）をアタッチするには、EC2 がそのロールを引き受ける権限を持っている必要がある。
-data "aws_iam_policy_document" "ec2_assume_role" { 
+data "aws_iam_policy_document" "ec2_assume_role" {
   statement {
     actions = ["sts:AssumeRole"] # ロールを受け入れる。
 
     principals {
       type        = "Service"
-      identifiers = ["ec2.amazonaws.com"] 
+      identifiers = ["ec2.amazonaws.com"]
     }
   }
 }
@@ -35,7 +35,7 @@ data "aws_iam_policy_document" "ec2_assume_role" {
 # ---------------------------------------------
 # ロールにアタッチしたいポリシーを指定
 resource "aws_iam_role_policy_attachment" "app_iam_role_ec2_readonly" {
-  role       = aws_iam_role.app_iam_role.name #アタッチ対象ロール名
+  role       = aws_iam_role.app_iam_role.name                    #アタッチ対象ロール名
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ReadOnlyAccess" #ARNをマネジメントコンソールで確認
 }
 

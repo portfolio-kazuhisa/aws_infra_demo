@@ -36,7 +36,7 @@ module "ec2" {
   subnet_id     = module.vpc.public_subnet_1a_id #vpc/output.tfから受け取る。
   app_sg_id     = module.sg.app_sg_id
   mng_sg_id     = module.sg.mng_sg_id
-  ec2_profile  = module.iam.ec2_profile
+  ec2_profile   = module.iam.ec2_profile
 }
 
 module "elb" {
@@ -53,20 +53,20 @@ module "elb" {
 }
 
 module "iam" {
-  source  = "./modules/iam"
-  project = "portfolio"
+  source      = "./modules/iam"
+  project     = "portfolio"
   environment = "dev"
 }
 
 module "rds" {
-  source = "./modules/rds"
-  project = "portfolio"
+  source      = "./modules/rds"
+  project     = "portfolio"
   environment = "dev"
 
-  subnet_id_1a   = module.vpc.public_subnet_1a_id
-  subnet_id_1c   = module.vpc.public_subnet_1c_id
-  rds_sg_id     = module.sg.rds_sg_id
-  
+  subnet_id_1a = module.vpc.public_subnet_1a_id
+  subnet_id_1c = module.vpc.public_subnet_1c_id
+  rds_sg_id    = module.sg.rds_sg_id
+
 }
 
 module "s3" {

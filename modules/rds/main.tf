@@ -64,16 +64,16 @@ resource "aws_db_instance" "mysql_standalone" {
   password = random_string.db_password.result #パスワードはtfstateに保存されるので、tfstateを.gitignoreに入れること。
 
   #基本設定
-  engine         = "mysql"
-  engine_version = "8.0.42"
-  instance_class = "db.t3.micro"
-  allocated_storage = 20
+  engine                = "mysql"
+  engine_version        = "8.0.42"
+  instance_class        = "db.t3.micro"
+  allocated_storage     = 20
   max_allocated_storage = 50
   storage_type          = "gp3"
   storage_encrypted     = false
 
   #AZ構成・ネットワーク関連
-  multi_az               = false #本当はAZ構成にすべき。自己学習のコスト削減のため。
+  multi_az               = false             #本当はAZ構成にすべき。自己学習のコスト削減のため。
   availability_zone      = "ap-northeast-1a" #マルチAZでない場合必須。terraformは判断できない。
   db_subnet_group_name   = aws_db_subnet_group.mysql_standalone_subnetgroup.name
   vpc_security_group_ids = [var.rds_sg_id]
@@ -88,13 +88,13 @@ resource "aws_db_instance" "mysql_standalone" {
   option_group_name    = aws_db_option_group.mysql_standalone_optiongroup.name
 
   backup_window              = "04:00-05:00" #いつバックアップを取るか
-  backup_retention_period    = 7 #バックアップ保管期間
+  backup_retention_period    = 7             #バックアップ保管期間
   maintenance_window         = "Mon:05:00-Mon:08:00"
   auto_minor_version_upgrade = false
 
   deletion_protection = false #誤削除防止
-  skip_final_snapshot = true #削除時バックアップ本当はtrueすべき。自己開発用にコストを削減。
-  apply_immediately = true #即時反映
+  skip_final_snapshot = true  #削除時バックアップ本当はtrueすべき。自己開発用にコストを削減。
+  apply_immediately   = true  #即時反映
 
   tags = {
     Name    = "${var.project}-${var.environment}-mysql-standalone"
