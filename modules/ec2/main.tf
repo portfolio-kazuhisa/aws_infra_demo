@@ -7,7 +7,9 @@ resource "aws_instance" "app_server" {
   subnet_id                   = var.subnet_id #インスタンスを配置するサブネットのID
   key_name                    = "portfolio-dev-key"
   associate_public_ip_address = true #パブリックIPが自動で割り当て。インターネット接続可能
-  #iam_instance_profile = aws_iam_instance_profile.ec2_profile.name
+
+  #iamモジュールのインスタンスプロフィールをEC2にアタッチする。
+  iam_instance_profile = var.ec2_profile
 
   vpc_security_group_ids = [
     #適用するセキュリティグループのID

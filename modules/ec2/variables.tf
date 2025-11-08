@@ -24,3 +24,7 @@ variable "app_sg_id" {
 variable "mng_sg_id" {
   type = string
 }
+
+variable "ec2_profile" {
+  type = string
+}

@@ -36,6 +36,15 @@ digraph G {
     "module.iam.aws_iam_role.app_iam_role" [label="aws_iam_role.app_iam_role"];
     "module.iam.aws_iam_role_policy_attachment.app_iam_role_s3_PutBucketPolicy" [label="aws_iam_role_policy_attachment.app_iam_role_s3_PutBucketPolicy"];
   }
+  subgraph "cluster_module.rds" {
+    label = "module.rds"
+    fontname = "sans-serif"
+    "module.rds.aws_db_instance.mysql_standalone" [label="aws_db_instance.mysql_standalone"];
+    "module.rds.aws_db_option_group.mysql_standalone_optiongroup" [label="aws_db_option_group.mysql_standalone_optiongroup"];
+    "module.rds.aws_db_parameter_group.mysql_standalone_parametergroup" [label="aws_db_parameter_group.mysql_standalone_parametergroup"];
+    "module.rds.aws_db_subnet_group.mysql_standalone_subnetgroup" [label="aws_db_subnet_group.mysql_standalone_subnetgroup"];
+    "module.rds.random_string.db_password" [label="random_string.db_password"];
+  }
   subgraph "cluster_module.s3" {
     label = "module.s3"
     fontname = "sans-serif"
@@ -105,6 +114,13 @@ digraph G {
   "module.elb.aws_lb_target_group_attachment.instance" -> "module.elb.aws_lb_target_group.alb_target_group";
   "module.iam.aws_iam_role.app_iam_role" -> "module.iam.data.aws_iam_policy_document.ec2_assume_role";
   "module.iam.aws_iam_role_policy_attachment.app_iam_role_s3_PutBucketPolicy" -> "module.iam.aws_iam_role.app_iam_role";
+  "module.rds.aws_db_instance.mysql_standalone" -> "module.rds.aws_db_option_group.mysql_standalone_optiongroup";
+  "module.rds.aws_db_instance.mysql_standalone" -> "module.rds.aws_db_parameter_group.mysql_standalone_parametergroup";
+  "module.rds.aws_db_instance.mysql_standalone" -> "module.rds.aws_db_subnet_group.mysql_standalone_subnetgroup";
+  "module.rds.aws_db_instance.mysql_standalone" -> "module.rds.random_string.db_password";
+  "module.rds.aws_db_instance.mysql_standalone" -> "module.sg.aws_security_group.db_sg";
+  "module.rds.aws_db_subnet_group.mysql_standalone_subnetgroup" -> "module.vpc.aws_subnet.public_subnet_1a";
+  "module.rds.aws_db_subnet_group.mysql_standalone_subnetgroup" -> "module.vpc.aws_subnet.public_subnet_1c";
   "module.s3.data.aws_iam_policy_document.s3_static_bucket" -> "module.s3.aws_s3_bucket.s3_static_bucket";
   "module.s3.aws_s3_bucket.s3_static_bucket" -> "module.s3.random_string.s3_unique_key";
   "module.s3.aws_s3_bucket_policy.s3_static_bucket" -> "module.s3.data.aws_iam_policy_document.s3_static_bucket";
