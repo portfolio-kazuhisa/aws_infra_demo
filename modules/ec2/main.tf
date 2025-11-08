@@ -1,18 +1,32 @@
 # ---------------------------------------------
+# key-pair
+# ---------------------------------------------
+resource "aws_key_pair" "keypair" {
+  key_name   = "${var.project}-${var.environment}-keypair"
+  public_key = file("${path.module}/key-pair/dev-keypair.pub")
+
+  tags = {
+    Name    = "${var.project}-${var.environment}-keypair"
+    Project = var.project
+    Env     = var.environment
+  }
+}
+
+# ---------------------------------------------
 # EC2 instance
 # ---------------------------------------------
 resource "aws_instance" "app_server" {
-  ami                         = "ami-0712bf5b0a7138d17"
+  ami                         = data.aws_ami.app.id
   instance_type               = var.instance_type
   subnet_id                   = var.subnet_id #インスタンスを配置するサブネットのID
-  key_name                    = "portfolio-dev-key"
+  key_name                    = aws_key_pair.keypair.key_name
   associate_public_ip_address = true #パブリックIPが自動で割り当て。インターネット接続可能
 
   #iamモジュールのインスタンスプロフィールをEC2にアタッチする。
   iam_instance_profile = var.ec2_profile
 
+  #適用するセキュリティグループのID
   vpc_security_group_ids = [
-    #適用するセキュリティグループのID
     var.app_sg_id,
     var.mng_sg_id
   ]
@@ -22,7 +36,7 @@ resource "aws_instance" "app_server" {
   }
 
   #初回実行時
-  user_data = templatefile("${path.module}/shell/user_data.sh", {
+  user_data = templatefile("${path.module}/user_data.sh", {
     INDEX_FILE = "/var/www/html/index.html"
   })
 }

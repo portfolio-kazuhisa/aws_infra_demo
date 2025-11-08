@@ -10,3 +10,7 @@ output "ec2_id" {
 output "ec2_ami" {
   value = aws_instance.app_server.ami
 }
+
+output "ami_data" {
+  value = data.aws_ami.app
+}
