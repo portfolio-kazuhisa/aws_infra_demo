@@ -53,21 +53,25 @@ jobs:
           terraform plan
 
       - name: apply
-        #timeout-minutes: 1  # ～分でタイムアウト(ただし、JOB全体を強制終了させる。)stat管理ができないためデストロイできない。
         run: |
-          terraform apply -auto-approve
+          for i in {1..3}; do
+            terraform apply -auto-approve && break
+            echo "Retry Apply"
+            sleep 60
+          done
 
-      - name: always destroy
-        if: always()
-        run: | 
-          terraform destroy -auto-approve
+      # - name: always destroy
+      #   if: always()
+      #   run: | 
+      #     terraform destroy -auto-approve
 
-#      - name: only success destroy
-#        if: success()
-#        run: | 
-#          terraform destroy -auto-approve
+      # - name: only success destroy
+      #   if: success()
+      #   run: | 
+      #     terraform destroy -auto-approve
 
-#      - name: only failure destroy
-#        if: failure()
-#        run: | 
-#          terraform destroy -auto-approve         
+      # - name: only failure destroy
+      #   if: failure()
+      #   run: | 
+      #     terraform destroy -auto-approve  
+       
