@@ -1,9 +1,6 @@
 #!/bin/bash
 # ---------------------------------
 # Amazon Linux 2 用 user-data
-# - MySQL クライアント（mysql コマンド）をインストール
-# - Apache (httpd) をインストールして起動
-# - 必要に応じて S3 / GitHub を使うためのサンプル（コメント）
 # ---------------------------------
 
 set -euo pipefail

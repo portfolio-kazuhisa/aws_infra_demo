@@ -1,3 +1,5 @@
+#  個人用terraformコマンド備忘録
+
 #　yesなしapply
 terraform apply -auto-approve
 
