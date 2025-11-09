@@ -11,13 +11,20 @@ terraform {
       version = "~> 6.0"
     }
   }
+
+  # tfstateを管理するためのバックエンドS3を認識する。
+  backend "s3" {
+    bucket = "dev-portfolio-tfstate-bucket" # リリース対象とは別のアカウントのS3バケットに保存することが推奨される
+    key = "dev.tfstate"
+    region = "ap-northeast-1"
+  }
 }
 
 # ---------------------------------------------
 # Provider
 # ---------------------------------------------
 provider "aws" {
-  # GitHub Actions 上で profile を指定するとエラーになる(なんで？)たぶんローカルの認証を見ちゃうから
+  # GitHub Actions 上で profile を指定するとエラーになる(なんで？)
   # profile = "terraform"
   region = "ap-northeast-1"
 }

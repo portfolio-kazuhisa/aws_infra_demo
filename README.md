@@ -1,69 +1,55 @@
-README作成中
+# 1.概要
 
-〇今後の課題
+このリポジトリはAWSでWEBアプリケーションを展開するためのインフラをterraformやGitHubActisonsなどで自動構築することを目的としたポートフォリオです。
 
-・共通変数を使っていないので、各モジュールで定義されている変数がバラバラ
+※個人学習用のため若干本番で運用するには推薦できないものもありますので、コメントとして推薦事項等記載しております。
 
-・outputの有効的な使い方がまだできていない。モジュールとして適切に使用されているかわからない。
+# 2.使用技術
+  - **AWS**
+    - VPC
+    - EC2(AmazonLinux2023)
+    - Route53
+    - ACM
+    - ELB
+    - IAM
+    - RDS
+    - S3
+  - **terraform**
+  - **bash**
+  - **GitHub Actions**
 
-・GitHub Actionsでのstate管理
+# 3.全体構成図
 
-・RDS/パラメーターストア
-・cloudfront S3の権限見直し。
+構成は高可用性とセキュリティを重視して設計されています。2つのAZに分散配置することで、障害時の冗長性を確保しています。
 
-〇ディレクトリ構成
-├── README.md
-├── main.tf
-├── output.tf
-├── terraform.tfstate
-├── terraform.tfstate.backup
-├── graph.dot
-├── local_valification.sh*
-├── 全体設計図.png
-├── logs
-│   ├── result-20251102-121521.log
-│   └── result-20251102-123022.log
-├── shell
-│   ├── ConnectCheck_rds.sh*
-│   ├── Terraform_ConsoleOperation.sh
-│   └── Git_Console_Operation.sh
-└── modules
-    ├── acm
-    │   ├── main.tf
-    │   ├── output.tf
-    │   └── variables.tf
-    ├── dns
-    │   ├── main.tf
-    │   ├── output.tf
-    │   └── variables.tf
-    ├── ec2
-    │   ├── main.tf
-    │   ├── output.tf
-    │   ├── variables.tf
-    │   └── shell
-    │       └── user_data.sh*
-    ├── elb
-    │   ├── main.tf
-    │   ├── output.tf
-    │   └── variables.tf
-    ├── iam
-    │   ├── main.tf
-    │   ├── output.tf
-    │   └── variables.tf
-    ├── rds
-    │   ├── main.tf
-    │   ├── output.tf
-    │   └── variables.tf
-    ├── s3
-    │   ├── data.tf
-    │   ├── main.tf
-    │   ├── output.tf
-    │   └── variables.tf
-    ├── sg
-    │   ├── main.tf
-    │   ├── output.tf
-    │   └── variables.tf
-    └── vpc
-        ├── main.tf
-        ├── output.tf
-        └── variables.tf
+ELBで各AZのEC2インスタンスにトラフィックを分散します。RDSはプライベートサブネット内に配置し、外部からの直接アクセスを防いでいます。
+
+![Architecture](png/Architecture.png)
+
+# 4.機能一覧/非機能一覧
+
+
+
+# 5.詳細設計
+
+[アプリケーションサーバ（EC2）](modules/ec2/README.md)
+
+```bash
+#!/bin/bash
+
+echo "Hello, "
+aws s3 ls s3://my-bucket --recursive | grep '.tfstate'
+```
+
+```hcl
+resource "aws_s3_bucket" "example" {
+  bucket = "my-example-bucket"
+  acl    = "private"
+}
+```
+
+# 6.今後の課題
+
+# 7.参考元
+
+このポートフォリオは、*Udemy* の「AWS × Terraform 実践講座」を参考に構築しました。一部構成やコードは教材をベースにしていますが、独自に変更・拡張を加えています。
