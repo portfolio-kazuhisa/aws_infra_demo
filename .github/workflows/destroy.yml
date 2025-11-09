@@ -54,26 +54,11 @@ jobs:
         run: |
           terraform plan
 
-      - name: apply
-        run: |
+      - name: always destroy
+        if: always()
+        run: | 
           for i in {1..3}; do
-            terraform apply -auto-approve && break
-            echo "Retry Apply"
+            terraform destroy -auto-approve && break
+            echo "Retry destroy"
             sleep 60
           done
-
-      # - name: always destroy
-      #   if: always()
-      #   run: | 
-      #     terraform destroy -auto-approve
-
-      # - name: only success destroy
-      #   if: success()
-      #   run: | 
-      #     terraform destroy -auto-approve
-
-      # - name: only failure destroy
-      #   if: failure()
-      #   run: | 
-      #     terraform destroy -auto-approve  
-       
