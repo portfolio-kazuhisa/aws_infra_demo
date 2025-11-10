@@ -6,7 +6,7 @@
 
 ※個人学習用のため若干本番で運用するには推薦できないものもありますので、コメントとして推薦事項等記載しております。
 
-〇リリース方法
+〇デプロイ手順
 
 
 # 2.使用技術/ツール
@@ -129,11 +129,14 @@ terraform destroy
 
 作成中
 
-# 4.各種詳細設計
+# 4.各種README
 作成中
 
 [アプリケーションサーバ（EC2）](modules/ec2/README.md)
 
+[証明書発行（ACM）](modules/acm/01_README.md)
+
+[名前解決（Route53）](modules/dns/01_README.md)
 ```bash
 #!/bin/bash
 
