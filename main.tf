@@ -15,7 +15,7 @@ terraform {
   # tfstateを管理するためのバックエンドS3を認識する。
   backend "s3" {
     bucket = "dev-portfolio-tfstate-bucket" # リリース対象とは別のアカウントのS3バケットに保存することが推奨される
-    key = "dev.tfstate"
+    key    = "dev.tfstate"
     region = "ap-northeast-1"
   }
 }
