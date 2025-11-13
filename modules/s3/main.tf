@@ -49,12 +49,12 @@ resource "aws_s3_bucket_policy" "s3_static_bucket" {
   ]
 }
 
+# 既存のS3リソースにポリシーを生成
 data "aws_iam_policy_document" "s3_static_bucket" {
   statement {
     effect  = "Allow"
     actions = ["s3:GetObject"]
     resources = [
-      #"${aws_s3_bucket.s3_static_bucket.arn}/",
       "${aws_s3_bucket.s3_static_bucket.arn}/*"
     ]
     principals {

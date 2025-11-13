@@ -1,5 +1,9 @@
 #  個人用terraformコマンド備忘録
 
+#　S3のstateをもとにローカルのtfstateを更新
+terraform init
+terraform refresh
+
 #　yesなしapply
 terraform apply -auto-approve
 

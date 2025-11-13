@@ -132,7 +132,7 @@ terraform destroy
 # 4.各種README
 作成中
 
-[アプリケーションサーバ（EC2）](modules/ec2/README.md)
+[アプリケーションサーバ（EC2）](modules/ec2/01_README.md)
 
 [証明書発行（ACM）](modules/acm/01_README.md)
 
