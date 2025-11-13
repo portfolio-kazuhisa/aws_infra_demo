@@ -16,7 +16,47 @@ EC2はエラスティックIPを付与していません。
 
 そのドメインを管理しているのがDNSです。
 で、そのdnsをawsマネージドなサービスにしたのがroute53です。
+![alt text](../../png/dns/onamae.png)
 
+```
+[ec2-user@ip-192-168-1-222 ~]$ dig portfolio-kazuhisa.com NS
+
+; <<>> DiG 9.18.33 <<>> portfolio-kazuhisa.com NS
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 30680
+;; flags: qr rd ra; QUERY: 1, ANSWER: 4, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 4096
+;; QUESTION SECTION:
+;portfolio-kazuhisa.com.                IN      NS
+
+;; ANSWER SECTION:
+portfolio-kazuhisa.com. 300     IN      NS      ns-83.awsdns-10.com.
+portfolio-kazuhisa.com. 300     IN      NS      ns-923.awsdns-51.net.
+portfolio-kazuhisa.com. 300     IN      NS      ns-1495.awsdns-58.org.
+portfolio-kazuhisa.com. 300     IN      NS      ns-1948.awsdns-51.co.uk.
+
+;; Query time: 10 msec
+;; SERVER: 192.168.0.2#53(192.168.0.2) (UDP)
+;; WHEN: Thu Nov 13 14:01:04 UTC 2025
+;; MSG SIZE  rcvd: 187
+
+[ec2-user@ip-192-168-1-222 ~]$ 
+
+```
+
+![dig_ns](../../png/dns/dig_ns.png)
+
+```
+[ec2-user@ip-192-168-1-222 ~]$ dig dev-alb.portfolio-kazuhisa.com A +short
+54.248.135.140
+54.92.89.181
+[ec2-user@ip-192-168-1-222 ~]$ dig dev-alb.portfolio-kazuhisa.com CNAME +short
+[ec2-user@ip-192-168-1-222 ~]$ 
+
+```
 ## 構成概要
 
 | リソース | 説明 |
