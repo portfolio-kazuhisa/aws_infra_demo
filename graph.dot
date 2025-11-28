@@ -1,0 +1,197 @@
+digraph G {
+  rankdir = "RL";
+  node [shape = rect, fontname = "sans-serif"];
+  subgraph "cluster_module.acm" {
+    label = "module.acm"
+    fontname = "sans-serif"
+    "module.acm.aws_acm_certificate.tokyo_cert" [label="aws_acm_certificate.tokyo_cert"];
+    "module.acm.aws_acm_certificate.virginia_cert" [label="aws_acm_certificate.virginia_cert"];
+    "module.acm.aws_acm_certificate_validation.cert_valid" [label="aws_acm_certificate_validation.cert_valid"];
+    "module.acm.aws_route53_record.route53_acm_dns_resolve" [label="aws_route53_record.route53_acm_dns_resolve"];
+  }
+  subgraph "cluster_module.cloudfront" {
+    label = "module.cloudfront"
+    fontname = "sans-serif"
+    "module.cloudfront.aws_cloudfront_distribution.cf" [label="aws_cloudfront_distribution.cf"];
+    "module.cloudfront.aws_cloudfront_origin_access_identity.cf_s3_origin_access_identity" [label="aws_cloudfront_origin_access_identity.cf_s3_origin_access_identity"];
+    "module.cloudfront.aws_route53_record.route53_cloudfront" [label="aws_route53_record.route53_cloudfront"];
+  }
+  subgraph "cluster_module.dns" {
+    label = "module.dns"
+    fontname = "sans-serif"
+    "module.dns.aws_route53_record.route53_A_record" [label="aws_route53_record.route53_A_record"];
+    "module.dns.aws_route53_zone.route53_zone" [label="aws_route53_zone.route53_zone"];
+  }
+  subgraph "cluster_module.ec2" {
+    label = "module.ec2"
+    fontname = "sans-serif"
+    "module.ec2.data.aws_ami.app" [label="data.aws_ami.app"];
+    "module.ec2.aws_autoscaling_group.app_asg" [label="aws_autoscaling_group.app_asg"];
+    "module.ec2.aws_autoscaling_policy.cpu_target_tracking" [label="aws_autoscaling_policy.cpu_target_tracking"];
+    "module.ec2.aws_key_pair.keypair" [label="aws_key_pair.keypair"];
+    "module.ec2.aws_launch_template.app_lanch_template" [label="aws_launch_template.app_lanch_template"];
+  }
+  subgraph "cluster_module.elb" {
+    label = "module.elb"
+    fontname = "sans-serif"
+    "module.elb.aws_lb.alb" [label="aws_lb.alb"];
+    "module.elb.aws_lb_listener.alb_listener_http" [label="aws_lb_listener.alb_listener_http"];
+    "module.elb.aws_lb_listener.alb_listener_https" [label="aws_lb_listener.alb_listener_https"];
+    "module.elb.aws_lb_target_group.alb_target_group" [label="aws_lb_target_group.alb_target_group"];
+  }
+  subgraph "cluster_module.iam" {
+    label = "module.iam"
+    fontname = "sans-serif"
+    "module.iam.data.aws_iam_policy_document.ec2_assume_role" [label="data.aws_iam_policy_document.ec2_assume_role"];
+    "module.iam.aws_iam_instance_profile.app_ec2_profile" [label="aws_iam_instance_profile.app_ec2_profile"];
+    "module.iam.aws_iam_role.app_iam_role" [label="aws_iam_role.app_iam_role"];
+    "module.iam.aws_iam_role_policy_attachment.app_iam_role_ec2_readonly" [label="aws_iam_role_policy_attachment.app_iam_role_ec2_readonly"];
+    "module.iam.aws_iam_role_policy_attachment.app_iam_role_s3_readonly" [label="aws_iam_role_policy_attachment.app_iam_role_s3_readonly"];
+    "module.iam.aws_iam_role_policy_attachment.app_iam_role_ssm_managed" [label="aws_iam_role_policy_attachment.app_iam_role_ssm_managed"];
+    "module.iam.aws_iam_role_policy_attachment.app_iam_role_ssm_readonly" [label="aws_iam_role_policy_attachment.app_iam_role_ssm_readonly"];
+  }
+  subgraph "cluster_module.rds" {
+    label = "module.rds"
+    fontname = "sans-serif"
+    "module.rds.aws_db_instance.mysql_standalone" [label="aws_db_instance.mysql_standalone"];
+    "module.rds.aws_db_option_group.mysql_standalone_optiongroup" [label="aws_db_option_group.mysql_standalone_optiongroup"];
+    "module.rds.aws_db_parameter_group.mysql_standalone_parametergroup" [label="aws_db_parameter_group.mysql_standalone_parametergroup"];
+    "module.rds.aws_db_subnet_group.mysql_standalone_subnetgroup" [label="aws_db_subnet_group.mysql_standalone_subnetgroup"];
+    "module.rds.random_string.db_password" [label="random_string.db_password"];
+  }
+  subgraph "cluster_module.s3" {
+    label = "module.s3"
+    fontname = "sans-serif"
+    "module.s3.data.aws_iam_policy_document.s3_static_bucket" [label="data.aws_iam_policy_document.s3_static_bucket"];
+    "module.s3.data.aws_prefix_list.s3_pl" [label="data.aws_prefix_list.s3_pl"];
+    "module.s3.aws_s3_bucket.s3_static_bucket" [label="aws_s3_bucket.s3_static_bucket"];
+    "module.s3.aws_s3_bucket_policy.s3_static_bucket" [label="aws_s3_bucket_policy.s3_static_bucket"];
+    "module.s3.aws_s3_bucket_public_access_block.s3_static_bucket" [label="aws_s3_bucket_public_access_block.s3_static_bucket"];
+    "module.s3.aws_s3_bucket_versioning.s3_static_bucket_versioning" [label="aws_s3_bucket_versioning.s3_static_bucket_versioning"];
+    "module.s3.random_string.s3_unique_key" [label="random_string.s3_unique_key"];
+  }
+  subgraph "cluster_module.sg" {
+    label = "module.sg"
+    fontname = "sans-serif"
+    "module.sg.aws_security_group.app_sg" [label="aws_security_group.app_sg"];
+    "module.sg.aws_security_group.db_sg" [label="aws_security_group.db_sg"];
+    "module.sg.aws_security_group.opmng_sg" [label="aws_security_group.opmng_sg"];
+    "module.sg.aws_security_group.web_sg" [label="aws_security_group.web_sg"];
+    "module.sg.aws_security_group_rule.app_in_web_http" [label="aws_security_group_rule.app_in_web_http"];
+    "module.sg.aws_security_group_rule.app_in_web_https" [label="aws_security_group_rule.app_in_web_https"];
+    "module.sg.aws_security_group_rule.app_out_db_mysql" [label="aws_security_group_rule.app_out_db_mysql"];
+    "module.sg.aws_security_group_rule.db_in_mysql" [label="aws_security_group_rule.db_in_mysql"];
+    "module.sg.aws_security_group_rule.opmng_in_ssh" [label="aws_security_group_rule.opmng_in_ssh"];
+    "module.sg.aws_security_group_rule.opmng_out_http" [label="aws_security_group_rule.opmng_out_http"];
+    "module.sg.aws_security_group_rule.opmng_out_https" [label="aws_security_group_rule.opmng_out_https"];
+    "module.sg.aws_security_group_rule.web_in_http" [label="aws_security_group_rule.web_in_http"];
+    "module.sg.aws_security_group_rule.web_in_https" [label="aws_security_group_rule.web_in_https"];
+    "module.sg.aws_security_group_rule.web_out_app_http" [label="aws_security_group_rule.web_out_app_http"];
+    "module.sg.aws_security_group_rule.web_out_app_https" [label="aws_security_group_rule.web_out_app_https"];
+  }
+  subgraph "cluster_module.vpc" {
+    label = "module.vpc"
+    fontname = "sans-serif"
+    "module.vpc.aws_internet_gateway.igw" [label="aws_internet_gateway.igw"];
+    "module.vpc.aws_route.public_rt_igw_r" [label="aws_route.public_rt_igw_r"];
+    "module.vpc.aws_route_table.private_rt" [label="aws_route_table.private_rt"];
+    "module.vpc.aws_route_table.public_rt" [label="aws_route_table.public_rt"];
+    "module.vpc.aws_route_table_association.private_rt_1a" [label="aws_route_table_association.private_rt_1a"];
+    "module.vpc.aws_route_table_association.private_rt_1c" [label="aws_route_table_association.private_rt_1c"];
+    "module.vpc.aws_route_table_association.public_rt_1a" [label="aws_route_table_association.public_rt_1a"];
+    "module.vpc.aws_route_table_association.public_rt_1c" [label="aws_route_table_association.public_rt_1c"];
+    "module.vpc.aws_subnet.private_subnet_1a" [label="aws_subnet.private_subnet_1a"];
+    "module.vpc.aws_subnet.private_subnet_1c" [label="aws_subnet.private_subnet_1c"];
+    "module.vpc.aws_subnet.public_subnet_1a" [label="aws_subnet.public_subnet_1a"];
+    "module.vpc.aws_subnet.public_subnet_1c" [label="aws_subnet.public_subnet_1c"];
+    "module.vpc.aws_vpc.vpc" [label="aws_vpc.vpc"];
+  }
+  "module.acm.aws_acm_certificate.tokyo_cert" -> "module.dns.aws_route53_zone.route53_zone";
+  "module.acm.aws_acm_certificate.virginia_cert" -> "module.dns.aws_route53_zone.route53_zone";
+  "module.acm.aws_acm_certificate_validation.cert_valid" -> "module.acm.aws_route53_record.route53_acm_dns_resolve";
+  "module.acm.aws_route53_record.route53_acm_dns_resolve" -> "module.acm.aws_acm_certificate.tokyo_cert";
+  "module.cloudfront.aws_cloudfront_distribution.cf" -> "module.acm.aws_acm_certificate.virginia_cert";
+  "module.cloudfront.aws_cloudfront_distribution.cf" -> "module.cloudfront.aws_cloudfront_origin_access_identity.cf_s3_origin_access_identity";
+  "module.cloudfront.aws_cloudfront_distribution.cf" -> "module.dns.aws_route53_record.route53_A_record";
+  "module.cloudfront.aws_cloudfront_distribution.cf" -> "module.s3.aws_s3_bucket.s3_static_bucket";
+  "module.cloudfront.aws_route53_record.route53_cloudfront" -> "module.cloudfront.aws_cloudfront_distribution.cf";
+  "module.dns.aws_route53_record.route53_A_record" -> "module.dns.aws_route53_zone.route53_zone";
+  "module.dns.aws_route53_record.route53_A_record" -> "module.elb.aws_lb.alb";
+  "module.ec2.aws_autoscaling_group.app_asg" -> "module.ec2.aws_launch_template.app_lanch_template";
+  "module.ec2.aws_autoscaling_group.app_asg" -> "module.elb.aws_lb_target_group.alb_target_group";
+  "module.ec2.aws_autoscaling_group.app_asg" -> "module.vpc.aws_subnet.public_subnet_1a";
+  "module.ec2.aws_autoscaling_group.app_asg" -> "module.vpc.aws_subnet.public_subnet_1c";
+  "module.ec2.aws_autoscaling_policy.cpu_target_tracking" -> "module.ec2.aws_autoscaling_group.app_asg";
+  "module.ec2.aws_launch_template.app_lanch_template" -> "module.ec2.data.aws_ami.app";
+  "module.ec2.aws_launch_template.app_lanch_template" -> "module.ec2.aws_key_pair.keypair";
+  "module.ec2.aws_launch_template.app_lanch_template" -> "module.iam.aws_iam_instance_profile.app_ec2_profile";
+  "module.ec2.aws_launch_template.app_lanch_template" -> "module.sg.aws_security_group.app_sg";
+  "module.ec2.aws_launch_template.app_lanch_template" -> "module.sg.aws_security_group.opmng_sg";
+  "module.elb.aws_lb.alb" -> "module.sg.aws_security_group.web_sg";
+  "module.elb.aws_lb.alb" -> "module.vpc.aws_subnet.public_subnet_1a";
+  "module.elb.aws_lb.alb" -> "module.vpc.aws_subnet.public_subnet_1c";
+  "module.elb.aws_lb_listener.alb_listener_http" -> "module.elb.aws_lb.alb";
+  "module.elb.aws_lb_listener.alb_listener_http" -> "module.elb.aws_lb_target_group.alb_target_group";
+  "module.elb.aws_lb_listener.alb_listener_https" -> "module.acm.aws_acm_certificate.tokyo_cert";
+  "module.elb.aws_lb_listener.alb_listener_https" -> "module.elb.aws_lb.alb";
+  "module.elb.aws_lb_listener.alb_listener_https" -> "module.elb.aws_lb_target_group.alb_target_group";
+  "module.elb.aws_lb_target_group.alb_target_group" -> "module.vpc.aws_vpc.vpc";
+  "module.iam.aws_iam_instance_profile.app_ec2_profile" -> "module.iam.aws_iam_role.app_iam_role";
+  "module.iam.aws_iam_role.app_iam_role" -> "module.iam.data.aws_iam_policy_document.ec2_assume_role";
+  "module.iam.aws_iam_role_policy_attachment.app_iam_role_ec2_readonly" -> "module.iam.aws_iam_role.app_iam_role";
+  "module.iam.aws_iam_role_policy_attachment.app_iam_role_s3_readonly" -> "module.iam.aws_iam_role.app_iam_role";
+  "module.iam.aws_iam_role_policy_attachment.app_iam_role_ssm_managed" -> "module.iam.aws_iam_role.app_iam_role";
+  "module.iam.aws_iam_role_policy_attachment.app_iam_role_ssm_readonly" -> "module.iam.aws_iam_role.app_iam_role";
+  "module.rds.aws_db_instance.mysql_standalone" -> "module.rds.aws_db_option_group.mysql_standalone_optiongroup";
+  "module.rds.aws_db_instance.mysql_standalone" -> "module.rds.aws_db_parameter_group.mysql_standalone_parametergroup";
+  "module.rds.aws_db_instance.mysql_standalone" -> "module.rds.aws_db_subnet_group.mysql_standalone_subnetgroup";
+  "module.rds.aws_db_instance.mysql_standalone" -> "module.rds.random_string.db_password";
+  "module.rds.aws_db_instance.mysql_standalone" -> "module.sg.aws_security_group.db_sg";
+  "module.rds.aws_db_subnet_group.mysql_standalone_subnetgroup" -> "module.vpc.aws_subnet.public_subnet_1a";
+  "module.rds.aws_db_subnet_group.mysql_standalone_subnetgroup" -> "module.vpc.aws_subnet.public_subnet_1c";
+  "module.s3.data.aws_iam_policy_document.s3_static_bucket" -> "module.cloudfront.aws_cloudfront_origin_access_identity.cf_s3_origin_access_identity";
+  "module.s3.data.aws_iam_policy_document.s3_static_bucket" -> "module.s3.aws_s3_bucket.s3_static_bucket";
+  "module.s3.aws_s3_bucket.s3_static_bucket" -> "module.s3.random_string.s3_unique_key";
+  "module.s3.aws_s3_bucket_policy.s3_static_bucket" -> "module.s3.data.aws_iam_policy_document.s3_static_bucket";
+  "module.s3.aws_s3_bucket_policy.s3_static_bucket" -> "module.s3.aws_s3_bucket_public_access_block.s3_static_bucket";
+  "module.s3.aws_s3_bucket_public_access_block.s3_static_bucket" -> "module.s3.aws_s3_bucket.s3_static_bucket";
+  "module.s3.aws_s3_bucket_versioning.s3_static_bucket_versioning" -> "module.s3.aws_s3_bucket.s3_static_bucket";
+  "module.sg.aws_security_group.app_sg" -> "module.vpc.aws_vpc.vpc";
+  "module.sg.aws_security_group.db_sg" -> "module.vpc.aws_vpc.vpc";
+  "module.sg.aws_security_group.opmng_sg" -> "module.vpc.aws_vpc.vpc";
+  "module.sg.aws_security_group.web_sg" -> "module.vpc.aws_vpc.vpc";
+  "module.sg.aws_security_group_rule.app_in_web_http" -> "module.sg.aws_security_group.app_sg";
+  "module.sg.aws_security_group_rule.app_in_web_http" -> "module.sg.aws_security_group.web_sg";
+  "module.sg.aws_security_group_rule.app_in_web_https" -> "module.sg.aws_security_group.app_sg";
+  "module.sg.aws_security_group_rule.app_in_web_https" -> "module.sg.aws_security_group.web_sg";
+  "module.sg.aws_security_group_rule.app_out_db_mysql" -> "module.sg.aws_security_group.app_sg";
+  "module.sg.aws_security_group_rule.app_out_db_mysql" -> "module.sg.aws_security_group.db_sg";
+  "module.sg.aws_security_group_rule.db_in_mysql" -> "module.sg.aws_security_group.app_sg";
+  "module.sg.aws_security_group_rule.db_in_mysql" -> "module.sg.aws_security_group.db_sg";
+  "module.sg.aws_security_group_rule.opmng_in_ssh" -> "module.sg.aws_security_group.opmng_sg";
+  "module.sg.aws_security_group_rule.opmng_out_http" -> "module.sg.aws_security_group.opmng_sg";
+  "module.sg.aws_security_group_rule.opmng_out_https" -> "module.sg.aws_security_group.opmng_sg";
+  "module.sg.aws_security_group_rule.web_in_http" -> "module.sg.aws_security_group.web_sg";
+  "module.sg.aws_security_group_rule.web_in_https" -> "module.sg.aws_security_group.web_sg";
+  "module.sg.aws_security_group_rule.web_out_app_http" -> "module.sg.aws_security_group.app_sg";
+  "module.sg.aws_security_group_rule.web_out_app_http" -> "module.sg.aws_security_group.web_sg";
+  "module.sg.aws_security_group_rule.web_out_app_https" -> "module.sg.aws_security_group.app_sg";
+  "module.sg.aws_security_group_rule.web_out_app_https" -> "module.sg.aws_security_group.web_sg";
+  "module.vpc.aws_internet_gateway.igw" -> "module.vpc.aws_vpc.vpc";
+  "module.vpc.aws_route.public_rt_igw_r" -> "module.vpc.aws_internet_gateway.igw";
+  "module.vpc.aws_route.public_rt_igw_r" -> "module.vpc.aws_route_table.public_rt";
+  "module.vpc.aws_route_table.private_rt" -> "module.vpc.aws_vpc.vpc";
+  "module.vpc.aws_route_table.public_rt" -> "module.vpc.aws_vpc.vpc";
+  "module.vpc.aws_route_table_association.private_rt_1a" -> "module.vpc.aws_route_table.private_rt";
+  "module.vpc.aws_route_table_association.private_rt_1a" -> "module.vpc.aws_subnet.private_subnet_1a";
+  "module.vpc.aws_route_table_association.private_rt_1c" -> "module.vpc.aws_route_table.private_rt";
+  "module.vpc.aws_route_table_association.private_rt_1c" -> "module.vpc.aws_subnet.private_subnet_1c";
+  "module.vpc.aws_route_table_association.public_rt_1a" -> "module.vpc.aws_route_table.public_rt";
+  "module.vpc.aws_route_table_association.public_rt_1a" -> "module.vpc.aws_subnet.public_subnet_1a";
+  "module.vpc.aws_route_table_association.public_rt_1c" -> "module.vpc.aws_route_table.public_rt";
+  "module.vpc.aws_route_table_association.public_rt_1c" -> "module.vpc.aws_subnet.public_subnet_1c";
+  "module.vpc.aws_subnet.private_subnet_1a" -> "module.vpc.aws_vpc.vpc";
+  "module.vpc.aws_subnet.private_subnet_1c" -> "module.vpc.aws_vpc.vpc";
+  "module.vpc.aws_subnet.public_subnet_1a" -> "module.vpc.aws_vpc.vpc";
+  "module.vpc.aws_subnet.public_subnet_1c" -> "module.vpc.aws_vpc.vpc";
+}
