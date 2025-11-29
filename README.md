@@ -219,6 +219,7 @@ done
 
 - 環境別構成に改修
 - dns検証の遅れによるエラー発生の恒久的な対策
+  - https://github.com/portfolio-kazuhisa/aws_infra_demo/issues/1#issue-3676375944
 - セキュリティーグループの見直し
 - IAMの最小権限に基づく設計(セキュリティーリスク回避)
 - 必要ない変数の削除・命名の仕方の統一

@@ -39,9 +39,9 @@ module "ec2" {
   project     = "portfolio"
   environment = "dev"
 
-  instance_type    = "t2.micro"                     #引数の値をここで指定する
-  subnet_id_1a     = module.vpc.public_subnet_1a_id #vpc/output.tfから受け取る。
-  subnet_id_1c     = module.vpc.public_subnet_1c_id #vpc/output.tfから受け取る。
+  instance_type    = "t2.micro"
+  subnet_id_1a     = module.vpc.public_subnet_1a_id
+  subnet_id_1c     = module.vpc.public_subnet_1c_id 
   app_sg_id        = module.sg.app_sg_id
   mng_sg_id        = module.sg.mng_sg_id
   ec2_profile      = module.iam.ec2_profile
