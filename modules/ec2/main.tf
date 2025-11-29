@@ -14,12 +14,11 @@ resource "aws_key_pair" "keypair" {
 
 # ---------------------------------------------
 # launch template
-#  起動テンプレートだとサブネットは指定できないみたい。
 # ---------------------------------------------
 resource "aws_launch_template" "app_lanch_template" {
   update_default_version = true #自動UPDATE
   name                   = "${var.project}-${var.environment}-app-lanch-template"
-  #イメージIDはdata.tfで参取得していれる。
+  #イメージIDはdata.tfで参照して取得していれる。
   image_id = data.aws_ami.app.id
   key_name = aws_key_pair.keypair.key_name
   tag_specifications {
@@ -59,6 +58,7 @@ resource "aws_autoscaling_group" "app_asg" {
   health_check_grace_period = 120
   health_check_type         = "ELB"
 
+  # サブネット指定
   vpc_zone_identifier = [
     var.subnet_id_1a,
     var.subnet_id_1c
@@ -72,10 +72,11 @@ resource "aws_autoscaling_group" "app_asg" {
     launch_template {
       launch_template_specification {
         launch_template_id = aws_launch_template.app_lanch_template.id
-        version            = "$Latest"
+        #version            = "$Latest" # AWS Launch Template の「最新バージョン」を参照するための予約文字列
+        version            = "$Default" # 挙動を変化させたくないので、常に固定のバージョンとして設定
       }
       override {
-        instance_type = "t2.micro"
+        instance_type = var.instance_type
       }
     }
   }
