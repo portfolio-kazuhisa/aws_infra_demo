@@ -20,3 +20,19 @@ data "aws_ami" "app" {
     values = ["hvm"]
   }
 }
+
+data "aws_instances" "app_asg" {
+  filter {
+    name   = "tag:aws:autoscaling:groupName"
+    values = ["portfolio-dev-app-asg"]
+  }
+
+  filter {
+    name   = "instance-state-name"
+    values = ["running"]
+  }
+}
+
+output "app_asg_instance_ids" {
+  value = data.aws_instances.app_asg.ids
+}
