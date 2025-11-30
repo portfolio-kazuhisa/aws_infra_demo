@@ -73,7 +73,7 @@ resource "aws_autoscaling_group" "app_asg" {
       launch_template_specification {
         launch_template_id = aws_launch_template.app_lanch_template.id
         #version            = "$Latest" # AWS Launch Template の「最新バージョン」を参照するための予約文字列
-        version            = "$Default" # 挙動を変化させたくないので、常に固定のバージョンとして設定
+        version = "$Default" # 挙動を変化させたくないので、常に固定のバージョンとして設定
       }
       override {
         instance_type = var.instance_type
@@ -92,6 +92,6 @@ resource "aws_autoscaling_policy" "cpu_target_tracking" {
     predefined_metric_specification {
       predefined_metric_type = "ASGAverageCPUUtilization"
     }
-    target_value = 60.0   # CPU使用率を60%前後に維持
+    target_value = 60.0 # CPU使用率を60%前後に維持
   }
 }

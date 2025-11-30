@@ -19,8 +19,8 @@ resource "aws_security_group_rule" "web_in_http" {
   security_group_id = aws_security_group.web_sg.id
   type              = "ingress"
   protocol          = "tcp"
-  from_port         = 80 #開始ポート。80番から
-  to_port           = 80 #終了ポート。80番まで開放。
+  from_port         = 80            #開始ポート。80番から
+  to_port           = 80            #終了ポート。80番まで開放。
   cidr_blocks       = ["0.0.0.0/0"] #appのsgでDenyするため問題なし
 }
 
