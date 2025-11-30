@@ -72,8 +72,7 @@ resource "aws_autoscaling_group" "app_asg" {
     launch_template {
       launch_template_specification {
         launch_template_id = aws_launch_template.app_lanch_template.id
-        #version            = "$Latest" # AWS Launch Template の「最新バージョン」を参照するための予約文字列
-        version = "$Default" # 挙動を変化させたくないので、常に固定のバージョンとして設定
+        version            = "$Latest" # AWS Launch Template の「最新バージョン」を参照するための予約文字列
       }
       override {
         instance_type = var.instance_type
