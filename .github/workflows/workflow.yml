@@ -55,43 +55,44 @@ jobs:
             echo "Retry Apply"
             sleep 60
           done
+  # 2025/11/30 -> デストロイは危険で、個人学習用とはいえ誤解を生むため削除
   # 本番・チーム運用では非推奨　個人学習用。コスト削減を目的
-  destroy:
-    name: "destroy"
-    runs-on: ubuntu-latest
-    needs: CI
-    if: failure()
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v5
+  # destroy:
+  #   name: "destroy"
+  #   runs-on: ubuntu-latest
+  #   needs: CI
+  #   if: failure()
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v5
         
-      - name: Setup terraform
-        uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_version: ${{ env.TF_VERSION }}
+  #     - name: Setup terraform
+  #       uses: hashicorp/setup-terraform@v3
+  #       with:
+  #         terraform_version: ${{ env.TF_VERSION }}
 
-      - name: configure aws credential
-        uses: aws-actions/configure-aws-credentials@v5.1.0
-        with:
-          aws-region: ${{ env.AWS_REGION }}
-          role-to-assume: ${{ secrets.AWS_IAM_ROLE_ARN }}
+  #     - name: configure aws credential
+  #       uses: aws-actions/configure-aws-credentials@v5.1.0
+  #       with:
+  #         aws-region: ${{ env.AWS_REGION }}
+  #         role-to-assume: ${{ secrets.AWS_IAM_ROLE_ARN }}
 
-      - name: init
-        run: |
-          terraform init -no-color -upgrade
+  #     - name: init
+  #       run: |
+  #         terraform init -no-color -upgrade
 
-      - name: validate
-        run: |
-          terraform validate -no-color
+  #     - name: validate
+  #       run: |
+  #         terraform validate -no-color
 
-      - name: plan
-        run: |
-          terraform plan
+  #     - name: plan
+  #       run: |
+  #         terraform plan
 
-      - name: always destroy
-        run: | 
-          for i in {1..3}; do
-            terraform destroy -auto-approve && break
-            echo "Retry destroy"
-            sleep 60
-          done
+  #     - name: always destroy
+  #       run: | 
+  #         for i in {1..3}; do
+  #           terraform destroy -auto-approve && break
+  #           echo "Retry destroy"
+  #           sleep 60
+  #         done
