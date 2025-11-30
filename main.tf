@@ -14,9 +14,10 @@ terraform {
 
   # tfstateを管理するためのバックエンドS3を認識する。
   backend "s3" {
-    bucket = "dev-portfolio-tfstate-bucket" # リリース対象とは別のアカウントのS3バケットに保存することが推奨される
-    key    = "dev.tfstate"
-    region = "ap-northeast-1"
+    bucket       = "dev-portfolio-tfstate-bucket" # リリース対象とは別のアカウントのS3バケットに保存することが推奨される
+    key          = "dev.tfstate"
+    region       = "ap-northeast-1"
+    use_lockfile = true
   }
 }
 
@@ -41,7 +42,7 @@ module "ec2" {
 
   instance_type    = "t2.micro"
   subnet_id_1a     = module.vpc.public_subnet_1a_id
-  subnet_id_1c     = module.vpc.public_subnet_1c_id 
+  subnet_id_1c     = module.vpc.public_subnet_1c_id
   app_sg_id        = module.sg.app_sg_id
   mng_sg_id        = module.sg.mng_sg_id
   ec2_profile      = module.iam.ec2_profile

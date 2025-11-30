@@ -130,12 +130,12 @@ terraform destroy
 
 ```hcl
 backend "s3" {
-  bucket = "dev-portfolio-tfstate-bucket"
-  key    = "dev.tfstate"
-  region = "ap-northeast-1"
+  bucket       = "dev-portfolio-tfstate-bucket" # リリース対象とは別のアカウントのS3バケットに保存することが推奨される
+  key          = "dev.tfstate"
+  region       = "ap-northeast-1"
+  use_lockfile = true
 }
 ```
-
 
 ---
 
@@ -185,22 +185,6 @@ done
 
 リトライ後、デプロイ正常終了
 ![retry_result](png/retry_result.png)
-
-
-もし仮にCIが失敗した場合はデストロイを行います。
-理由は不完全な状態でデプロイしてしまうとTerraformの状態ファイルが不整合になる可能性があるため、あまり望ましくないと考えております。
-
-状態は、完全にデプロイできているか、完全に存在しないかのどちらかしかない状態がベストなケースとして考え、以下のdestroyジョブを作成しました。
-※デストロイは基本は、チーム運用では行いません。個人開発用で、かつ、コスト削減のため
-
-```bash
-  destroy:
-    name: "destroy"
-    runs-on: ubuntu-latest
-    needs: CI
-    if: failure()
-    steps:
-```
 
 # 4.各種README（作成中）
 
