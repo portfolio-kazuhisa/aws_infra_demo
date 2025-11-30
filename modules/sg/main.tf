@@ -114,22 +114,24 @@ resource "aws_security_group_rule" "opmng_out_https" {
   cidr_blocks       = ["0.0.0.0/0"]
 }
 
-# SSMのみを使用しての運用となるため削除
+# httpdやMYSQLクライアントをインストールするためには必須のSG
+# 2025/11/30　削除しデプロイしたところ挙動がおかしくなったため再投入
+resource "aws_security_group_rule" "opmng_out_http" {
+  security_group_id = aws_security_group.opmng_sg.id
+  type              = "egress"
+  protocol          = "tcp"
+  from_port         = 80
+  to_port           = 80
+  cidr_blocks       = ["0.0.0.0/0"] # インスタンスから外部のため問題なし
+}
+
+# SSMのみを使用しての運用となるため削除　というより危険
 # resource "aws_security_group_rule" "opmng_in_ssh" {
 #   security_group_id = aws_security_group.opmng_sg.id
 #   type              = "ingress"
 #   protocol          = "tcp"
 #   from_port         = 22
 #   to_port           = 22
-#   cidr_blocks       = ["0.0.0.0/0"]
-# }
-
-# resource "aws_security_group_rule" "opmng_out_http" {
-#   security_group_id = aws_security_group.opmng_sg.id
-#   type              = "egress"
-#   protocol          = "tcp"
-#   from_port         = 80
-#   to_port           = 80
 #   cidr_blocks       = ["0.0.0.0/0"]
 # }
 
