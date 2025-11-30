@@ -130,13 +130,12 @@ terraform destroy
 
 ```hcl
 backend "s3" {
-  bucket = "dev-portfolio-tfstate-bucket" # リリース対象とは別のアカウントのS3バケットに保存することが推奨される
-  key    = "dev.tfstate"
-  region = "ap-northeast-1"
-  use_lockfile   = true
+  bucket       = "dev-portfolio-tfstate-bucket" # リリース対象とは別のアカウントのS3バケットに保存することが推奨される
+  key          = "dev.tfstate"
+  region       = "ap-northeast-1"
+  use_lockfile = true
 }
 ```
-
 
 ---
 
