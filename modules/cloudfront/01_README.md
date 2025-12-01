@@ -1,21 +1,23 @@
 # CloudFront
 
-AWS上でACM証明書を発行し、Route53を使ってDNS検証を行うためのものです。
+概要作成中
 
-CloudFrontで使用するため、東京リージョンとバージニアリージョン両方に証明書を作成します。
+x-Cacheという値が`Hit from cloudfront`になればクラウドフロントがしっかり作動しているということが確認できます。
+![alt text](../../png/cloudfront/X-Cache.png)
 
 ## なぜCloudFrontが必要なのか
 
-
+アプリケーションが仮に世界中からの高速なアクセスを要求される場合（例えば、世界的なアーティストのチケット販売のためHPなど）は、cloudFrontが必須です。
+チケット販売開始直後は世界中から同時アクセスが殺到します。CloudFrontを利用することで、オリジンに直接負荷が集中せず、エッジロケーションで分散処理されます。
+もちろん、cloudFrontがなくてもALB構成やオートスケーリングなどを前提として構成しているため
+負荷には耐えられるとは思いますが、仮にcloudFrontがないとレイテンシが発生して、クライアントからの信頼を損ねる可能性があります。
+サイトの信頼性の向上のためにも非常に重要な要素の一つであると認識しております。
 
 ## 
 
-### 東京リージョン
+### 
 
 ```hcl
-resource "aws_acm_certificate" "tokyo_cert" {
-  domain_name       = "*.${var.DomainName}"
-  validation_method = var.validation_method
-  ...
+
 }
 ```
