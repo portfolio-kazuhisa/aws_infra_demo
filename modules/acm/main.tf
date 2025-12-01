@@ -86,12 +86,5 @@ resource "aws_acm_certificate" "virginia_cert" {
     create_before_destroy = true
   }
 
-  #リソース間の依存関係を明示的に指定するため
-  #明示的に順序を制御したいのでdepends_onを使用
-  #ACM証明書のDNS検証に必要なゾーンが先に作成される
-
-  depends_on = [var.host_zone] # dotを見るとちゃんと順序関係を示されているから機能してるとは思うが。。。。
-
-  #depends_on = aws_route53_zone.route53_zone # []つけへんとエラーになる
-  # →　単体の値（stringやobject）として解釈しようとして失敗
+  depends_on = [var.host_zone]
 }

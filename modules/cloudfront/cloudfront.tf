@@ -6,7 +6,8 @@ resource "aws_cloudfront_distribution" "cf" {
   is_ipv6_enabled = true
   comment         = "cache distribution"
   price_class     = "PriceClass_All"
-
+  
+  #　動的オリジン(ELB)
   origin {
     domain_name = var.domain   #ELBドメイン名　
     origin_id   = var.elb_name #
@@ -19,6 +20,7 @@ resource "aws_cloudfront_distribution" "cf" {
     }
   }
 
+  #　静的オリジン(S3)
   origin {
     domain_name = var.s3_bucket_regional_domain_name
     origin_id   = var.s3_bucket_id
@@ -65,7 +67,7 @@ resource "aws_cloudfront_distribution" "cf" {
     default_ttl            = 86400
     max_ttl                = 31536000
     compress               = true
-    viewer_protocol_policy = "redirect-to-https" # allow-all, https-only, redirect-to-https
+    viewer_protocol_policy = "redirect-to-https" 
   }
 
   restrictions {
@@ -84,10 +86,12 @@ resource "aws_cloudfront_distribution" "cf" {
   }
 }
 
+# S3バケットを パブリック公開せず に、CloudFront経由でのみアクセス可能にする。
 resource "aws_cloudfront_origin_access_identity" "cf_s3_origin_access_identity" {
   comment = "S3 static bucket access identity"
 }
 
+# クラウドフロントのAレコード
 resource "aws_route53_record" "route53_cloudfront" {
   zone_id = var.zone_id
   name    = "dev-${var.domain}"
