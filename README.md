@@ -206,6 +206,7 @@ done
 - dns検証の遅れによるエラー発生の恒久的な対策  
   - 🔗 [関連Issue #dns検証の遅れによるエラー発生 ](https://github.com/portfolio-kazuhisa/aws_infra_demo/issues/1#issue-3676375944) 
 - セキュリティーグループの見直し(2025/12/1解決)
+  - 🔗 [関連Issue #セキュリティーグループの見直し](https://github.com/portfolio-kazuhisa/aws_infra_demo/issues/7#issue-3692734216) 
 - IAMの最小権限に基づく設計(セキュリティーリスク回避)
 - 必要ない変数の削除・命名の仕方の統一
 
