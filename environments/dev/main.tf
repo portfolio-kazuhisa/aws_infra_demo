@@ -31,14 +31,22 @@ provider "aws" {
 }
 
 ####################################################
+# 共通変数
+####################################################
+locals {
+  project     = "portfolio"
+  environment = "dev"
+}
+
+####################################################
 # module モジュールを呼び出す
 # ユースケース：引数の値を指定する
 # 　　　　　　　sourceでどのモジュールを呼び出すかを指定する
 ####################################################
 module "ec2" {
-  source      = "./modules/ec2"
-  project     = "portfolio"
-  environment = "dev"
+  source      = "../../modules/ec2"
+  project     = local.project
+  environment = local.environment
 
   instance_type    = "t2.micro"
   subnet_id_1a     = module.vpc.public_subnet_1a_id
@@ -50,9 +58,9 @@ module "ec2" {
 }
 
 module "cloudfront" {
-  source      = "./modules/cloudfront"
-  project     = "portfolio"
-  environment = "dev"
+  source      = "../../modules/cloudfront"
+  project     = local.project
+  environment = local.environment
 
   domain                         = module.dns.a_record.fqdn
   elb_name                       = module.elb.elb.name
@@ -63,9 +71,9 @@ module "cloudfront" {
 }
 
 module "elb" {
-  source      = "./modules/elb"
-  project     = "portfolio"
-  environment = "dev"
+  source      = "../../modules/elb"
+  project     = local.project
+  environment = local.environment
 
   target_ec2_id  = module.ec2.ec2_id
   vpc_id         = module.vpc.vpc_id
@@ -76,15 +84,15 @@ module "elb" {
 }
 
 module "iam" {
-  source      = "./modules/iam"
-  project     = "portfolio"
-  environment = "dev"
+  source      = "../../modules/iam"
+  project     = local.project
+  environment = local.environment
 }
 
 module "rds" {
-  source      = "./modules/rds"
-  project     = "portfolio"
-  environment = "dev"
+  source      = "../../modules/rds"
+  project     = local.project
+  environment = local.environment
 
   subnet_id_1a = module.vpc.public_subnet_1a_id
   subnet_id_1c = module.vpc.public_subnet_1c_id
@@ -93,40 +101,40 @@ module "rds" {
 }
 
 module "s3" {
-  source      = "./modules/s3"
-  project     = "portfolio"
-  environment = "dev"
+  source      = "../../modules/s3"
+  project     = local.project
+  environment = local.environment
 
   cf_s3_origin_access_identity_iam_arn = module.cloudfront.cf_s3_origin_access_identity_iam_arn
 }
 
 module "sg" {
-  source      = "./modules/sg"
-  project     = "portfolio"
-  environment = "dev"
+  source      = "../../modules/sg"
+  project     = local.project
+  environment = local.environment
 
   vpc_id = module.vpc.vpc_id
 }
 
 module "dns" {
-  source      = "./modules/dns"
-  project     = "portfolio"
-  environment = "dev"
+  source      = "../../modules/dns"
+  project     = local.project
+  environment = local.environment
   DomainName  = "portfolio-kazuhisa.com"
 
   elb = module.elb.elb
 }
 
 module "vpc" {
-  source      = "./modules/vpc"
-  project     = "portfolio"
-  environment = "dev"
+  source      = "../../modules/vpc"
+  project     = local.project
+  environment = local.environment
 }
 
 module "acm" {
-  source            = "./modules/acm"
-  project           = "portfolio"
-  environment       = "dev"
+  source            = "../../modules/acm"
+  project     = local.project
+  environment = local.environment
   validation_method = "DNS"
   DomainName        = "portfolio-kazuhisa.com"
 
